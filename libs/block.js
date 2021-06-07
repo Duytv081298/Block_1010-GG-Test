@@ -249,7 +249,7 @@ function setAnimation() {
             "block_blue": { "frames": [5] },
             "block_cyan": { "frames": [6] },
             "btn_again": { "frames": [7] },
-            "play_now": { "frames": [8] },
+            "install_now": { "frames": [8] },
             "block_green": { "frames": [9] },
             "block_orange": { "frames": [10] },
             "block_pink": { "frames": [11] },
@@ -351,7 +351,7 @@ function setBackground() {
     text_scores.textBaseline = "alphabetic";
     text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
 
-    install_now = new createjs.Sprite(spriteSheet, "play_now");
+    install_now = new createjs.Sprite(spriteSheet, "install_now");
     install_now.scaleX = stage.canvas.width / 4.5 / install_now.getBounds().width;
     install_now.scaleY = stage.canvas.width / 4.5 / install_now.getBounds().width;
     install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;

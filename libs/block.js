@@ -47,7 +47,6 @@ const blockFree = [
 ];
 
 const blockFreeHard = [
-    [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
     [[1, 1], [1], [1]],
     [[1], [1], [1], [1], [1]],
     [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
@@ -226,36 +225,38 @@ function setAnimation() {
             [1, 1, 1028, 282, 0, -19, -24],
             [1031, 1, 985, 984, 0, -22, -13],
             [1, 285, 367, 137, 0, 0, -13],
-            [370, 285, 93, 102, 0, 0, 0],
-            [370, 389, 93, 93, 0, 0, 0],
-            [1, 424, 93, 93, 0, 0, 0],
+            [370, 285, 300, 533, 0, 0, 0],
+            [1, 424, 93, 102, 0, 0, 0],
+            [1, 528, 93, 93, 0, 0, 0],
+            [1, 623, 93, 93, 0, 0, 0],
+            [1, 718, 200, 53, 0, 0, 0],
+            [1, 773, 200, 53, 0, 0, 0],
             [96, 424, 93, 93, 0, 0, 0],
-            [191, 424, 93, 93, 0, 0, 0],
-            [286, 484, 200, 53, 0, 0, 0],
-            [465, 285, 200, 53, 0, 0, 0],
-            [1, 519, 93, 93, 0, 0, 0],
             [96, 519, 93, 93, 0, 0, 0],
+            [96, 614, 93, 93, 0, 0, 0],
+            [191, 424, 93, 93, 0, 0, 0],
             [191, 519, 93, 93, 0, 0, 0],
-            [465, 340, 93, 93, 0, 0, 0],
-            [488, 435, 93, 93, 0, 0, 0]
+            [191, 614, 93, 93, 0, 0, 0],
+            [203, 709, 93, 93, 0, 0, 0]
         ],
 
-        animations: {
+        "animations": {
             "bottom": { "frames": [0] },
             "grid": { "frames": [1] },
             "score": { "frames": [2] },
-            "hand_tut": { "frames": [3] },
-            "block_blue": { "frames": [4] },
-            "block_cyan": { "frames": [5] },
-            "block_green": { "frames": [6] },
-            "block_orange": { "frames": [7] },
-            "btn_again": { "frames": [8] },
-            "play_now": { "frames": [9] },
-            "block_pink": { "frames": [10] },
-            "block_purple": { "frames": [11] },
-            "block_red": { "frames": [12] },
-            "block_yellow": { "frames": [13] },
-            "square_hint": { "frames": [14] }
+            "bg": { "frames": [3] },
+            "hand_tut": { "frames": [4] },
+            "block_blue": { "frames": [5] },
+            "block_cyan": { "frames": [6] },
+            "btn_again": { "frames": [7] },
+            "play_now": { "frames": [8] },
+            "block_green": { "frames": [9] },
+            "block_orange": { "frames": [10] },
+            "block_pink": { "frames": [11] },
+            "block_purple": { "frames": [12] },
+            "block_red": { "frames": [13] },
+            "block_yellow": { "frames": [14] },
+            "square_hint": { "frames": [15] }
         },
     });
     setBackground();
@@ -301,6 +302,10 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
+    var bg = new createjs.Sprite(spriteSheet, "bg");
+    bg.scaleX = stage.canvas.width / bg.getBounds().width;
+    bg.scaleY = stage.canvas.height / bg.getBounds().height;
+    stage.addChild(bg);
 
     var bgText = new createjs.Shape();
     bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height / 17);
@@ -352,7 +357,7 @@ function setBackground() {
     install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;
     install_now.y = stage.canvas.height - install_now.getBounds().height * install_now.scaleY * 1.7;
 
-    stage.addChild(bgText, textE, score, grid, bottom, text_scores, install_now);
+    stage.addChild(bg, bgText, textE, score, grid, bottom, text_scores, install_now);
     var install_nowx = install_now.x,
         install_nowy = install_now.y,
         install_nowscale = stage.canvas.width / 4.5 / install_now.getBounds().width;
@@ -656,7 +661,6 @@ function onMouseUp(evt) {
     var standard = { x: indexHint.realityX, y: indexHint.realityY }
     if (target.x >= standard.x - game.block.width / 3 && target.x <= standard.x + game.block.width / 3 && groupCurr == 0) {
         if (target.y >= standard.y - game.block.width / 3 && target.y <= standard.y + game.block.width / 3) {
-
             removeEvent(target);
             if (level1.step[levelCurr][hintCurr + 1].hint.length != 0) {
                 hintCurr++;
@@ -671,6 +675,10 @@ function onMouseUp(evt) {
                 groupHint.removeAllChildren()
                 removeBlock(1);
             }
+        } else {
+            target.x = blockUse[groupCurr].x;
+            target.y = blockUse[groupCurr].y;
+            target.scale = blockUse[groupCurr].scale;
         }
     } else {
         target.x = blockUse[groupCurr].x;
@@ -1050,13 +1058,13 @@ function tick(event) {
 function getLinkInstall() {
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     if (/windows phone/i.test(userAgent)) {
-        window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot")
+        window.open("https://play.google.com/store/apps/details?id=com.blockpuzzle.galaxy.bluedream.puzzle")
     } else if (/android/i.test(userAgent)) {
-        window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot");
+        window.open("https://play.google.com/store/apps/details?id=com.blockpuzzle.galaxy.bluedream.puzzle");
     } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        window.open("https://apps.apple.com/vn/app/dinosaurs-bubble-shooter/id1563711673?itsct=apps_box_link&itscg=30200");
+        window.open("https://play.google.com/store/apps/details?id=com.blockpuzzle.galaxy.bluedream.puzzle");
     } else {
-        window.open("https://play.google.com/store/apps/details?id=bubble.shooter.primitive.dinosaurs.egg.shot")
+        window.open("https://play.google.com/store/apps/details?id=com.blockpuzzle.galaxy.bluedream.puzzle")
     }
 
 }

@@ -28,7 +28,6 @@ var freeUser = false, stepFree = 1;
 const blockFree = [
     [[1], [1], [1], [1], [1]],
     [[0, 1], [1, 1], [0, 1]],
-    [[1]],
     [[1, 1], [1, 1]],
     [[0, 1], [1, 1]],
     [[1], [1, 1]],
@@ -238,7 +237,7 @@ function setAnimation() {
             [465, 340, 93, 93, 0, 0, 0],
             [488, 435, 93, 93, 0, 0, 0]
         ],
-        
+
         "animations": {
             "bottom": { "frames": [0] },
             "grid": { "frames": [1] },
@@ -355,7 +354,7 @@ function setBackground() {
     install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;
     install_now.y = stage.canvas.height - install_now.getBounds().height * install_now.scaleY * 1.7;
 
-    stage.addChild( bgText, textE, score, grid, bottom, text_scores, install_now);
+    stage.addChild(bgText, textE, score, grid, bottom, text_scores, install_now);
     var install_nowx = install_now.x,
         install_nowy = install_now.y,
         install_nowscale = stage.canvas.width / 4.5 / install_now.getBounds().width;

@@ -23,7 +23,7 @@ var containerMain = new createjs.Container(), containerNew = [];
 var defaultX = 0, defaultY = 0;
 var indexGroup = {}, groupCurr = 0, newScaleGroup, numGroup;
 var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distanceGTH = 0, hintFree = [];
-var hand_tut;
+var hand_tut, text_scores, scores = 0;
 var freeUser = false;
 const blockFree = [
     [[1], [1], [1], [1], [1]],
@@ -49,16 +49,16 @@ const level1 = {
     "map":
         [
             [
+                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, 4, -1, -1, -1, -1],
                 [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+                [-1, -1, -1, -1, -1, 6, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 6, 6, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1],
+                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1]
             ],
             [
                 [-1, -1, -1, 1, 1, -1, -1, -1, -1, -1],
@@ -84,39 +84,39 @@ const level1 = {
                 [-1, -1, -1, -1, -1, 6, 6, -1, -1, -1],
                 [-1, -1, -1, -1, -1, 6, 1, -1, -1, -1]
             ],
+            [
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+            ],
         ],
     "step":
         [
             [
                 {
-                    "hint": [{ x: 5, y: 0 }, { x: 5, y: 1 }, { x: 5, y: 2 }, { x: 5, y: 3 }, { x: 5, y: 4 }],
-                    "block": [[1], [1], [1], [1], [1]],
-                    "color": 4,
-                    "use": true
-                },
-                {
-                    "hint": [{ x: 4, y: 0 }, { x: 4, y: 1 }, { x: 4, y: 2 }, { x: 4, y: 3 }],
-                    "block": [[1], [1], [1], [1]],
-                    "color": 3,
-                    "use": true
-                },
-                {
-                    "hint": [{ x: 4, y: 8 }, { x: 5, y: 8 }, { x: 4, y: 9 }, { x: 5, y: 9 }],
-                    "block": [[1, 1], [1, 1]],
-                    "color": 7,
-                    "use": true
-                },
-                {
-                    "hint": [{ x: 4, y: 7 }, { x: 5, y: 7 }, { x: 5, y: 6 }],
-                    "block": [[0, 1], [1, 1]],
-                    "color": 6,
-                    "use": true
-                },
-                {
                     "hint": [{ x: 4, y: 4 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 4, y: 6 }],
                     "block": [[1, 0], [1, 1], [1, 0]],
                     "color": 6,
                     "use": true
+                },
+                {
+                    "hint": [],
+                    "block": [[1, 1], [1, 1]],
+                    "color": 7,
+                    "use": false
+                },
+                {
+                    "hint": [],
+                    "block": [[0, 1], [1, 1]],
+                    "color": 6,
+                    "use": false
                 },
                 {
                     "hint": [],
@@ -317,8 +317,13 @@ function setBackground() {
 
     hand_tut = new createjs.Sprite(spriteSheet, "hand_tut");
 
+    text_scores = new createjs.Text(scores, "22px Impact", "#ffffff");
+    text_scores.y = score.y + score.getBounds().height * score.scale
+    text_scores.scale = (stage.canvas.width / 37) / text_scores.getMeasuredWidth();
+    text_scores.textBaseline = "alphabetic";
+    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
 
-    stage.addChild(score, grid, bottom);
+    stage.addChild(score, grid, bottom, text_scores);
 }
 
 //Group Block
@@ -422,6 +427,11 @@ function renderGroupBlock(blockArr, color, index) {
 }
 function blockToContainer() {
     var blockChild = blockUse[groupCurr].target.children
+    scores += blockChild.length * 10
+
+    text_scores.text = scores;
+    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
+
     var originX = blockChild[0].x + blockUse[groupCurr].target.x;
     var originY = (blockUse[groupCurr].target.y);
     var index = lToI({ x: originX, y: originY })
@@ -583,6 +593,7 @@ function onMouseUp(evt) {
     var standard = { x: indexHint.realityX, y: indexHint.realityY }
     if (target.x >= standard.x - game.block.width / 3 && target.x <= standard.x + game.block.width / 3 && groupCurr == 0) {
         if (target.y >= standard.y - game.block.width / 3 && target.y <= standard.y + game.block.width / 3) {
+
             removeEvent(target);
             if (level1.step[levelCurr][hintCurr + 1].hint.length != 0) {
                 hintCurr++;
@@ -648,6 +659,9 @@ function onMouseUpFree(evt) {
     // var location = currentMouse(evt);
     var target = blockUse[groupCurr].target;
     if (hintFree.length != 0) {
+        scores += hintFree.length * 10
+        text_scores.text = scores;
+        text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
         removeHand()
         removeEvent(target);
         const color = blockUse[groupCurr].color;
@@ -721,7 +735,12 @@ function removeHintFree() {
 
 //Collision
 function removeBlock(remove) {
-    const removeArr = checkRC()
+    const removeArray = checkRC()
+    var removeArr = removeArray.arr
+    scores += removeArray.lengthRemove * 15
+    text_scores.text = scores;
+    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
+
     if (remove == 0) {
         addEvent();
         renderBlockHint();
@@ -749,7 +768,7 @@ function removeBlock(remove) {
     }
 }
 function newLevel() {
-    if (levelCurr + 1 <= level1.map.length - 1) {
+    if (levelCurr + 1 <= level1.map.length - 2) {
         containerMain.removeAllChildren()
         removeGrBlock()
         hintCurr = 0
@@ -764,7 +783,7 @@ function newLevel() {
         freeUser = true
         containerMain.removeAllChildren()
         removeGrBlock()
-        var map = level1.map[0];
+        var map = level1.map[3];
         game.map = setMap(map);
         renderGroupBlockDefault()
         addEventFree();
@@ -810,7 +829,7 @@ function checkRC() {
         if (add) array.push(item)
 
     }
-    return array
+    return { arr: array, lengthRemove: arrRemove.length }
 }
 // location to index
 function lToI(location) {

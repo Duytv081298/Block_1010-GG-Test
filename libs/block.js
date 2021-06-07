@@ -468,15 +468,11 @@ function renderGroupBlock(blockArr, color, index) {
 
 }
 function blockToContainer() {
+    var indexHint = getIndexHint();
     var blockChild = blockUse[groupCurr].target.children
     scores += blockChild.length * 10
-
     text_scores.text = scores;
     text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-
-    var originX = blockChild[0].x + blockUse[groupCurr].target.x;
-    var originY = (blockUse[groupCurr].target.y);
-    var index = lToI({ x: originX, y: originY })
 
     const color = blockUse[groupCurr].color;
     var colorstr = convertBlock(color);
@@ -485,8 +481,8 @@ function blockToContainer() {
     for (let i = 0; i < blockChild.length; i++) {
         var block = blockChild[i];
         var index1 = lToIGr({ x: block.x, y: block.y });
-        var x = index.x + index1.x;
-        var y = index.y + index1.y;
+        var x = indexHint.minX + index1.x;
+        var y = indexHint.minY + index1.y;
         var item = game.map[y][x];
         var newblock = blocknew.clone();
         newblock.x = item.x;

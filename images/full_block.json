@@ -1,0 +1,45 @@
+{
+
+"images": [
+    "full_block.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 1026, 280, 0, -20, -25],
+    [1029, 1, 983, 982, 0, -23, -14],
+    [1, 283, 366, 136, 0, 0, -14],
+    [369, 283, 93, 102, 0, 0, 0],
+    [369, 387, 93, 93, 0, 0, 0],
+    [1, 421, 93, 93, 0, 0, 0],
+    [96, 421, 93, 93, 0, 0, 0],
+    [191, 421, 93, 93, 0, 0, 0],
+    [464, 283, 93, 93, 0, 0, 0],
+    [464, 378, 93, 93, 0, 0, 0],
+    [464, 473, 93, 93, 0, 0, 0],
+    [1, 516, 93, 93, 0, 0, 0],
+    [96, 516, 93, 93, 0, 0, 0]
+],
+
+"animations": {
+    "bottom": { "frames": [0] },
+    "grid": { "frames": [1] },
+    "score": { "frames": [2] },
+    "hand_tut": { "frames": [3] },
+    "block/blue": { "frames": [4] },
+    "block/cyan": { "frames": [5] },
+    "block/green": { "frames": [6] },
+    "block/orange": { "frames": [7] },
+    "block/pink": { "frames": [8] },
+    "block/purple": { "frames": [9] },
+    "block/red": { "frames": [10] },
+    "block/yellow": { "frames": [11] },
+    "square_hint": { "frames": [12] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:c813a56f32905cb224da3bf5d78d53f0:6947f06ed2ced505e92d31d3e776cac2:9589d0df6b1e3b8906c973296c7bce1e$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

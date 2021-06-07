@@ -1,0 +1,51 @@
+{
+
+"images": [
+    "full_block.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 1028, 282, 0, -19, -24],
+    [1031, 1, 985, 984, 0, -22, -13],
+    [1, 285, 367, 137, 0, 0, -13],
+    [370, 285, 300, 533, 0, 0, 0],
+    [1, 424, 93, 102, 0, 0, 0],
+    [1, 528, 93, 93, 0, 0, 0],
+    [1, 623, 93, 93, 0, 0, 0],
+    [1, 718, 200, 53, 0, 0, 0],
+    [1, 773, 200, 53, 0, 0, 0],
+    [96, 424, 93, 93, 0, 0, 0],
+    [96, 519, 93, 93, 0, 0, 0],
+    [96, 614, 93, 93, 0, 0, 0],
+    [191, 424, 93, 93, 0, 0, 0],
+    [191, 519, 93, 93, 0, 0, 0],
+    [191, 614, 93, 93, 0, 0, 0],
+    [203, 709, 93, 93, 0, 0, 0]
+],
+
+"animations": {
+    "bottom": { "frames": [0] },
+    "grid": { "frames": [1] },
+    "score": { "frames": [2] },
+    "output-onlinepngtools": { "frames": [3] },
+    "hand_tut": { "frames": [4] },
+    "block/blue": { "frames": [5] },
+    "block/cyan": { "frames": [6] },
+    "btn_again": { "frames": [7] },
+    "play_now": { "frames": [8] },
+    "block/green": { "frames": [9] },
+    "block/orange": { "frames": [10] },
+    "block/pink": { "frames": [11] },
+    "block/purple": { "frames": [12] },
+    "block/red": { "frames": [13] },
+    "block/yellow": { "frames": [14] },
+    "square_hint": { "frames": [15] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:653d0bbba31df3e95b6f99e110ec6505:eafc8503a38006ae6fb3e44cfbbd8051:9589d0df6b1e3b8906c973296c7bce1e$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

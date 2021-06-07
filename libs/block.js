@@ -303,12 +303,12 @@ function setStage() {
 function setBackground() {
 
     var bgText = new createjs.Shape();
-    bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height /17);
+    bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height / 17);
     var textE = new createjs.Text('New Block Puzzle 2021', "22px Impact", "#000000");
 
     textE.scale = (stage.canvas.width / 2) / textE.getMeasuredWidth()
     textE.x = (stage.canvas.width - textE.getMeasuredWidth() * textE.scale) / 2
-    textE.y = (stage.canvas.height /17 - textE.getMeasuredHeight() * textE.scale)/2
+    textE.y = (stage.canvas.height / 17 - textE.getMeasuredHeight() * textE.scale) / 2
 
     var grid = new createjs.Sprite(spriteSheet, "grid");
     grid.scale = stage.canvas.width * 0.9 / grid.getBounds().width;
@@ -391,12 +391,12 @@ function renderGroupBlockDefault() {
 function createGroupBlock() {
     switch (groupCurr) {
         case 0:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 7);
-            var gr2w = blockUse[groupCurr + 2].width * (storageBlock.height / 7);
+            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
+            var gr2w = blockUse[groupCurr + 2].width * (storageBlock.height / 6.5);
             var gr1 = blockUse[groupCurr + 1].target;
             var gr2 = blockUse[groupCurr + 2].target;
             blockUse[groupCurr] = blockUse[groupCurr + 1]
-            blockUse[groupCurr].x = indexGroup.x0 + (storageBlock.height / 7)
+            blockUse[groupCurr].x = indexGroup.x0 + (storageBlock.height / 6.5)
             blockUse[groupCurr + 1] = blockUse[groupCurr + 2]
             blockUse[groupCurr + 1].x = indexGroup.x1 - gr2w / 2
             createjs.Tween.get(gr1)
@@ -405,7 +405,7 @@ function createGroupBlock() {
                 .to({ x: blockUse[groupCurr + 1].x, y: blockUse[groupCurr + 1].y }, 100)
             break;
         case 1:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 7);
+            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
             var gr1 = blockUse[groupCurr + 1].target;
             blockUse[groupCurr] = blockUse[groupCurr + 1]
             blockUse[groupCurr].x = indexGroup.x1 - gr1w / 2
@@ -426,7 +426,7 @@ function renderGroupBlock(blockArr, color, index) {
     if (index == null) index = 2;
     var colorstr = convertBlock(color);
     var block = new createjs.Sprite(spriteSheet, colorstr);
-    block.scale = (storageBlock.height / 7) / block.getBounds().width;
+    block.scale = (storageBlock.height / 6.5) / block.getBounds().width;
     var colContainer = blockArr[0].length;
     var size = block.scale * block.getBounds().width;
 
@@ -448,10 +448,10 @@ function renderGroupBlock(blockArr, color, index) {
     var widthContainer = colContainer * block.getBounds().width * block.scale;
 
     containerBlockUse.y = storageBlock.avgY - heightContainer / 2;
-    containerBlockUse.x = index == 0 ? storageBlock.minX : index == 1 ? (storageBlock.maxX + storageBlock.minX - widthContainer) / 2 : storageBlock.maxX - widthContainer;
+    containerBlockUse.x = index == 0 ? storageBlock.minX : index == 1 ? (storageBlock.maxX + storageBlock.minX - widthContainer + stage.canvas.width / 40) / 2 : storageBlock.maxX - widthContainer;
     indexGroup = {
         x0: storageBlock.minX,
-        x1: (storageBlock.maxX + storageBlock.minX) / 2,
+        x1: (storageBlock.maxX + storageBlock.minX + stage.canvas.width / 40) / 2,
         x2: storageBlock.maxX
     };
     stage.addChild(containerBlockUse);
@@ -511,13 +511,13 @@ function removeGrBlock() {
 }
 function addHand() {
     hand_tut.x = blockUse[0].x;
-    hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 7) / 2.5;
+    hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5;
     hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
     stage.addChild(hand_tut);
     createjs.Tween.get(hand_tut, { loop: true })
         .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 1500)
         .wait(300)
-        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 7) / 2.5 }, 1500)
+        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5 }, 1500)
         .wait(300)
 }
 function removeHand() {
@@ -1030,8 +1030,8 @@ function lToI(location) {
     return { x: Math.floor(x), y: Math.floor(y) };
 }
 function lToIGr(location) {
-    var x = location.x / (storageBlock.height / 7);
-    var y = location.y / (storageBlock.height / 7);
+    var x = location.x / (storageBlock.height / 6.5);
+    var y = location.y / (storageBlock.height / 6.5);
     return { x: Math.floor(x), y: Math.floor(y) };
 }
 function indexToLocation(p) {

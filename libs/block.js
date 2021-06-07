@@ -239,7 +239,7 @@ function setAnimation() {
             [191, 614, 93, 93, 0, 0, 0],
             [203, 709, 93, 93, 0, 0, 0]
         ],
-
+        
         "animations": {
             "bottom": { "frames": [0] },
             "grid": { "frames": [1] },

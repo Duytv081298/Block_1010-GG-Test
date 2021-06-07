@@ -962,7 +962,7 @@ function endGame() {
 
 
         var play_again = new createjs.Sprite(spriteSheet, "btn_again");
-        play_again.scale = stage.canvas.width / 3 / play_again.getBounds().width
+        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
         play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
         play_again.y = text.y + play_again.getBounds().height * play_again.scale * 2.5
 
@@ -970,12 +970,12 @@ function endGame() {
 
         var play_againx = play_again.x,
             play_againy = play_again.y,
-            play_againscale = stage.canvas.width / 3 / play_again.getBounds().width;
+            play_againscale = stage.canvas.width / 2.7 / play_again.getBounds().width;
         createjs.Tween.get(play_again, { loop: true })
             .to(
                 {
-                    scale: (stage.canvas.width / 5) / play_again.getBounds().width,
-                    x: (stage.canvas.width - ((stage.canvas.width / 5) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
+                    scale: (stage.canvas.width / 4) / play_again.getBounds().width,
+                    x: (stage.canvas.width - ((stage.canvas.width / 4) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
                     y: play_againy - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
                 },
                 500,

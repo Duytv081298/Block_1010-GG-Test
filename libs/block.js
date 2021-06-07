@@ -23,8 +23,8 @@ var containerMain = new createjs.Container(), containerNew = [];
 var defaultX = 0, defaultY = 0;
 var indexGroup = {}, groupCurr = 0, newScaleGroup, numGroup;
 var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distanceGTH = 0, hintFree = [];
-var hand_tut, text_scores, scores = 0;
-var freeUser = false;
+var hand_tut, text_scores, scores = 0, install_now;
+var freeUser = false, stepFree = 1;
 const blockFree = [
     [[1], [1], [1], [1], [1]],
     [[0, 1], [1, 1], [0, 1]],
@@ -44,6 +44,16 @@ const blockFree = [
     [[1], [1]],
     [[1, 1], [0, 1], [0, 1]],
     [[1, 1, 1]],
+];
+
+const blockFreeHard = [
+    [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+    [[1, 1], [1], [1]],
+    [[1], [1], [1], [1], [1]],
+    [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
+    [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+    [[1, 1], [0, 1], [0, 1]],
+    [[1, 1, 1, 1, 1]],
 ];
 const level1 = {
     "map":
@@ -213,36 +223,40 @@ function setAnimation() {
         images: [queue.getResult("full_block")],
         framerate: 25,
         frames: [
-            [1, 1, 1026, 280, 0, -20, -25],
-            [1029, 1, 983, 982, 0, -23, -14],
-            [1, 283, 366, 136, 0, 0, -14],
-            [369, 283, 93, 102, 0, 0, 0],
-            [369, 387, 93, 93, 0, 0, 0],
-            [1, 421, 93, 93, 0, 0, 0],
-            [96, 421, 93, 93, 0, 0, 0],
-            [191, 421, 93, 93, 0, 0, 0],
-            [464, 283, 93, 93, 0, 0, 0],
-            [464, 378, 93, 93, 0, 0, 0],
-            [464, 473, 93, 93, 0, 0, 0],
-            [1, 516, 93, 93, 0, 0, 0],
-            [96, 516, 93, 93, 0, 0, 0]
+            [1, 1, 1028, 282, 0, -19, -24],
+            [1031, 1, 985, 984, 0, -22, -13],
+            [1, 285, 367, 137, 0, 0, -13],
+            [370, 285, 93, 102, 0, 0, 0],
+            [370, 389, 93, 93, 0, 0, 0],
+            [1, 424, 93, 93, 0, 0, 0],
+            [96, 424, 93, 93, 0, 0, 0],
+            [191, 424, 93, 93, 0, 0, 0],
+            [286, 484, 200, 53, 0, 0, 0],
+            [465, 285, 200, 53, 0, 0, 0],
+            [1, 519, 93, 93, 0, 0, 0],
+            [96, 519, 93, 93, 0, 0, 0],
+            [191, 519, 93, 93, 0, 0, 0],
+            [465, 340, 93, 93, 0, 0, 0],
+            [488, 435, 93, 93, 0, 0, 0]
         ],
 
         animations: {
-            bottom: { frames: [0] },
-            grid: { frames: [1] },
-            score: { frames: [2] },
-            hand_tut: { frames: [3] },
-            block_blue: { frames: [4] },
-            block_cyan: { frames: [5] },
-            block_green: { frames: [6] },
-            block_orange: { frames: [7] },
-            block_pink: { frames: [8] },
-            block_purple: { frames: [9] },
-            block_red: { frames: [10] },
-            block_yellow: { frames: [11] },
-            square_hint: { frames: [12] }
-        }
+            "bottom": { "frames": [0] },
+            "grid": { "frames": [1] },
+            "score": { "frames": [2] },
+            "hand_tut": { "frames": [3] },
+            "block_blue": { "frames": [4] },
+            "block_cyan": { "frames": [5] },
+            "block_green": { "frames": [6] },
+            "block_orange": { "frames": [7] },
+            "btn_again": { "frames": [8] },
+            "play_now": { "frames": [9] },
+            "block_pink": { "frames": [10] },
+            "block_purple": { "frames": [11] },
+            "block_red": { "frames": [12] },
+            "block_yellow": { "frames": [13] },
+            "square_hint": { "frames": [14] }
+        },
     });
     setBackground();
     stage.addChild(containerMain);
@@ -287,6 +301,15 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
+
+    var bgText = new createjs.Shape();
+    bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height /17);
+    var textE = new createjs.Text('New Block Puzzle 2021', "22px Impact", "#000000");
+
+    textE.scale = (stage.canvas.width / 2) / textE.getMeasuredWidth()
+    textE.x = (stage.canvas.width - textE.getMeasuredWidth() * textE.scale) / 2
+    textE.y = (stage.canvas.height /17 - textE.getMeasuredHeight() * textE.scale)/2
+
     var grid = new createjs.Sprite(spriteSheet, "grid");
     grid.scale = stage.canvas.width * 0.9 / grid.getBounds().width;
     var residual = stage.canvas.width / 45;
@@ -296,7 +319,7 @@ function setBackground() {
     var score = new createjs.Sprite(spriteSheet, "score");
     score.scale = scale;
     score.x = (stage.canvas.width - score.getBounds().width * score.scale) / 2;
-    score.y = stage.canvas.height / 15;
+    score.y = stage.canvas.height / 10;
     grid.y = score.y + score.getBounds().height * score.scale - residual / 2;
 
     defaultX = grid.x + stage.canvas.width / 27;
@@ -323,7 +346,28 @@ function setBackground() {
     text_scores.textBaseline = "alphabetic";
     text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
 
-    stage.addChild(score, grid, bottom, text_scores);
+    install_now = new createjs.Sprite(spriteSheet, "play_now");
+    install_now.scaleX = stage.canvas.width / 4.5 / install_now.getBounds().width;
+    install_now.scaleY = stage.canvas.width / 4.5 / install_now.getBounds().width;
+    install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;
+    install_now.y = stage.canvas.height - install_now.getBounds().height * install_now.scaleY * 1.7;
+
+    stage.addChild(bgText, textE, score, grid, bottom, text_scores, install_now);
+    var install_nowx = install_now.x,
+        install_nowy = install_now.y,
+        install_nowscale = stage.canvas.width / 4.5 / install_now.getBounds().width;
+    createjs.Tween.get(install_now, { loop: true })
+        .to(
+            {
+                scale: (stage.canvas.width / 7) / install_now.getBounds().width,
+                x: (stage.canvas.width - ((stage.canvas.width / 7) / install_now.getBounds().width) * install_now.getBounds().width) / 2,
+                y: install_nowy - (stage.canvas.width / 7 - stage.canvas.width / 8) / 10,
+            },
+            500,
+            createjs.Ease.linear
+        )
+        .to({ scale: install_nowscale, x: install_nowx, y: install_nowy }, 500, createjs.Ease.linear);
+    install_now.addEventListener("click", () => { getLinkInstall() }, false);
 }
 
 //Group Block
@@ -421,8 +465,9 @@ function renderGroupBlock(blockArr, color, index) {
         scale: containerBlockUse.scale,
         color: color
     };
-    if (blockUse.length == 3) blockUse[2] = groupBlock;
-    else blockUse.push(groupBlock);
+    // if (blockUse.length == 3) blockUse[2] = groupBlock;
+    // else 
+    blockUse.push(groupBlock);
 
 }
 function blockToContainer() {
@@ -467,13 +512,13 @@ function removeGrBlock() {
 function addHand() {
     hand_tut.x = blockUse[0].x;
     hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 7) / 2.5;
-    hand_tut.scale = scale;
+    hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
     stage.addChild(hand_tut);
     createjs.Tween.get(hand_tut, { loop: true })
-        .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 2000)
-        .wait(500)
-        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 7) / 2.5 }, 2000)
-        .wait(500)
+        .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 1500)
+        .wait(300)
+        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 7) / 2.5 }, 1500)
+        .wait(300)
 }
 function removeHand() {
     createjs.Tween.removeTweens(hand_tut);
@@ -543,6 +588,24 @@ function removeEvent(target) {
         canvas.removeEventListener("mouseup", onMouseUp);
     }
 }
+function removeAllEvent() {
+    for (let i = 0; i < blockUse.length; i++) {
+        const target = blockUse[i].target;
+        if (isMobile) {
+            if (target) {
+                target.removeEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
+                canvas.removeEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
+                canvas.removeEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
+            }
+        } else {
+            if (target) {
+                target.removeEventListener("mousedown", onMouseDown);
+                canvas.removeEventListener("mousemove", onPressMoveFree);
+                canvas.removeEventListener("mouseup", onMouseUpFree);
+            }
+        }
+    }
+}
 function detectMobile() {
     try {
         var opts = Object.defineProperty({}, "passive", {
@@ -599,7 +662,7 @@ function onMouseUp(evt) {
                 hintCurr++;
                 numGroup++;
                 blockToContainer()
-                createGroupBlock();
+                createGroupBlockFree();
                 removeBlock(0);
                 if (hintCurr == 1) removeHand();
             } else {
@@ -621,15 +684,19 @@ function addEventFree() {
     for (let i = 0; i < blockUse.length; i++) {
         const target = blockUse[i].target;
         if (isMobile) {
-            target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
-            target.myParam = i;
+            if (target) {
+                target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
+                canvas.addEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
+                canvas.addEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
+                target.myParam = i;
+            }
         } else {
-            target.addEventListener("mousedown", onMouseDown);
-            canvas.addEventListener("mousemove", onPressMoveFree);
-            canvas.addEventListener("mouseup", onMouseUpFree);
-            target.myParam = i;
+            if (target) {
+                target.addEventListener("mousedown", onMouseDown);
+                canvas.addEventListener("mousemove", onPressMoveFree);
+                canvas.addEventListener("mouseup", onMouseUpFree);
+                target.myParam = i;
+            }
         }
     }
 }
@@ -678,10 +745,13 @@ function onMouseUpFree(evt) {
             containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
             game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color }
         }
+        removeBlock(2);
         blockUse[groupCurr].target.removeAllChildren()
         stage.removeChild(blockUse[groupCurr].target)
-        createGroupBlock();
-        removeBlock(2);
+        blockUse[groupCurr].target = null
+        createGroupBlockFree();
+        addEventFree();
+        endGame();
     } else {
         target.x = blockUse[groupCurr].x;
         target.y = blockUse[groupCurr].y;
@@ -732,6 +802,30 @@ function removeHintFree() {
         containerMain.removeChild(hint)
     }
 }
+function createGroupBlockFree() {
+    var render = true
+    for (let i = 0; i < blockUse.length; i++) {
+        const target = blockUse[i].target;
+        if (target != null) render = false
+    }
+    if (render) {
+        stepFree++
+        if (stepFree < 8) {
+            for (let i = 0; i < 3; i++) {
+                var block = blockFree[Math.floor(Math.random() * blockFree.length)]
+                var color = Math.floor(Math.random() * 8)
+                renderGroupBlock(block, color, i);
+            }
+        } else {
+            for (let i = 0; i < 3; i++) {
+                var block = blockFreeHard[Math.floor(Math.random() * blockFreeHard.length)]
+                var color = Math.floor(Math.random() * 8)
+                renderGroupBlock(block, color, i);
+            }
+        }
+
+    }
+}
 
 //Collision
 function removeBlock(remove) {
@@ -745,9 +839,8 @@ function removeBlock(remove) {
         addEvent();
         renderBlockHint();
     } else if (remove == 2) {
-        addEventFree();
-        removeHintFree()
-        hintFree = []
+        removeHintFree();
+        hintFree = [];
     }
     for (let i = 0; i < removeArr.length; i++) {
         const index = removeArr[i];
@@ -830,6 +923,104 @@ function checkRC() {
 
     }
     return { arr: array, lengthRemove: arrRemove.length }
+}
+
+function endGame() {
+    var close = checkLose();
+    if (close) {
+        stage.removeChild(install_now);
+        removeAllEvent()
+        var particle = new createjs.Shape();
+        particle.graphics.f("#fafafa").dr(0, 0, stage.canvas.width, stage.canvas.height);
+        particle.alpha = 0.4
+
+        var bgcore = new createjs.Shape();
+        bgcore.graphics.f("#000000").rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
+        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
+        bgcore.y = stage.canvas.height / 5
+        bgcore.alpha = 1
+
+
+        var best = new createjs.Text('BEST', "22px Impact", "#ffffff");
+
+        best.scale = (stage.canvas.width / 10) / best.getMeasuredWidth()
+        best.x = (stage.canvas.width - best.getMeasuredWidth() * best.scale) / 2
+        best.y = bgcore.y + best.getMeasuredHeight() * best.scale * 1.4
+
+        var text = text_scores.clone()
+        text.scale = (stage.canvas.width / 7) / text.getMeasuredWidth()
+        text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
+        text.y = bgcore.y * 2 - text.getMeasuredHeight() * text.scale * 1.2
+
+
+        var play_again = new createjs.Sprite(spriteSheet, "btn_again");
+        play_again.scale = stage.canvas.width / 3 / play_again.getBounds().width
+        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
+        play_again.y = text.y + play_again.getBounds().height * play_again.scale * 2.5
+
+        stage.addChild(particle, bgcore, best, text, play_again);
+
+        var play_againx = play_again.x,
+            play_againy = play_again.y,
+            play_againscale = stage.canvas.width / 3 / play_again.getBounds().width;
+        createjs.Tween.get(play_again, { loop: true })
+            .to(
+                {
+                    scale: (stage.canvas.width / 5) / play_again.getBounds().width,
+                    x: (stage.canvas.width - ((stage.canvas.width / 5) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
+                    y: play_againy - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
+                },
+                500,
+                createjs.Ease.linear
+            )
+            .to({ scale: play_againscale, x: play_againx, y: play_againy }, 500, createjs.Ease.linear);
+        play_again.addEventListener("click", () => { getLinkInstall() }, false);
+
+
+    }
+}
+function checkLose() {
+    var mainGr = [];
+    var close = false;
+    for (let i = 0; i < blockUse.length; i++) {
+        if (blockUse[i].target != null) {
+            const blockChild = blockUse[i].target.children;
+            var indexChild = [];
+            for (let i = 0; i < blockChild.length; i++) {
+                var block = blockChild[i];
+                var index = lToIGr({ x: block.x, y: block.y });
+                indexChild.push(index)
+            }
+            mainGr.push(indexChild)
+        }
+    }
+    var map = game.map
+    for (let y = 0; y < map.length; y++) {
+        for (let x = 0; x < map[y].length; x++) {
+            const item = map[y][x];
+            if (!item.existing) {
+                for (let i = 0; i < mainGr.length; i++) {
+                    var grTrue = true;
+                    for (let j = 0; j < mainGr[i].length; j++) {
+                        const index = mainGr[i][j];
+                        var indexGrX = x + index.x
+                        var indexGrY = y + index.y
+                        if (indexGrY > 9 || indexGrX > 9) grTrue = false
+                        else {
+                            var block = map[indexGrY][indexGrX]
+                            if (block.existing) grTrue = false
+                        }
+                    }
+                    if (grTrue) {
+                        close = true
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
+    return !close
 }
 // location to index
 function lToI(location) {

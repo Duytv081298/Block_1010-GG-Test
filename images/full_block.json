@@ -6,19 +6,21 @@
 
 "framerate": 20,
 "frames": [
-    [1, 1, 1026, 280, 0, -20, -25],
-    [1029, 1, 983, 982, 0, -23, -14],
-    [1, 283, 366, 136, 0, 0, -14],
-    [369, 283, 93, 102, 0, 0, 0],
-    [369, 387, 93, 93, 0, 0, 0],
-    [1, 421, 93, 93, 0, 0, 0],
-    [96, 421, 93, 93, 0, 0, 0],
-    [191, 421, 93, 93, 0, 0, 0],
-    [464, 283, 93, 93, 0, 0, 0],
-    [464, 378, 93, 93, 0, 0, 0],
-    [464, 473, 93, 93, 0, 0, 0],
-    [1, 516, 93, 93, 0, 0, 0],
-    [96, 516, 93, 93, 0, 0, 0]
+    [1, 1, 1028, 282, 0, -19, -24],
+    [1031, 1, 985, 984, 0, -22, -13],
+    [1, 285, 367, 137, 0, 0, -13],
+    [370, 285, 93, 102, 0, 0, 0],
+    [370, 389, 93, 93, 0, 0, 0],
+    [1, 424, 93, 93, 0, 0, 0],
+    [96, 424, 93, 93, 0, 0, 0],
+    [191, 424, 93, 93, 0, 0, 0],
+    [286, 484, 200, 53, 0, 0, 0],
+    [465, 285, 200, 53, 0, 0, 0],
+    [1, 519, 93, 93, 0, 0, 0],
+    [96, 519, 93, 93, 0, 0, 0],
+    [191, 519, 93, 93, 0, 0, 0],
+    [465, 340, 93, 93, 0, 0, 0],
+    [488, 435, 93, 93, 0, 0, 0]
 ],
 
 "animations": {
@@ -30,15 +32,17 @@
     "block/cyan": { "frames": [5] },
     "block/green": { "frames": [6] },
     "block/orange": { "frames": [7] },
-    "block/pink": { "frames": [8] },
-    "block/purple": { "frames": [9] },
-    "block/red": { "frames": [10] },
-    "block/yellow": { "frames": [11] },
-    "square_hint": { "frames": [12] }
+    "btn_again": { "frames": [8] },
+    "play_now": { "frames": [9] },
+    "block/pink": { "frames": [10] },
+    "block/purple": { "frames": [11] },
+    "block/red": { "frames": [12] },
+    "block/yellow": { "frames": [13] },
+    "square_hint": { "frames": [14] }
 },
 
 "texturepacker": [
-        "SmartUpdateHash: $TexturePacker:SmartUpdate:c813a56f32905cb224da3bf5d78d53f0:6947f06ed2ced505e92d31d3e776cac2:9589d0df6b1e3b8906c973296c7bce1e$",
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:7fc933294f9fa81a4146471f71908ae0:0f37d39ee5865c9fa838d1cca624fa4b:9589d0df6b1e3b8906c973296c7bce1e$",
         "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
 ]
 

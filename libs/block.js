@@ -9,196 +9,29 @@ var height = window.innerHeight
     || document.body.clientHeight;
 width = isMobile ? width : height / 1.7;
 var canvas, stage, update = true;
-var supportsPassive = false, pressMove = false;
-var game = {
-    block: { width: 0 },
-    map: [],
-    scores: 0,
+var supportsPassive = false, pressMove = false, pressUp = false;
+var containerMain = new createjs.Container();
+var processCr = new createjs.Container();
+var process = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    realityWidth: 0,
+    reality: {},
+    star: {},
+    radius: 0,
+    rStar: 0,
+    score: 24,
+    text_scores: {},
+    text_IQ: {}
 };
-var scale = 1;
-var spriteSheet;
-var levelCurr = 0;
-var blockUse = [], storageBlock;
-var containerMain = new createjs.Container(), containerNew = [];
-var defaultX = 0, defaultY = 0;
-var indexGroup = {}, groupCurr = 0, newScaleGroup, numGroup;
-var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distanceGTH = 0, hintFree = [];
-var hand_tut, text_scores, scores = 0, install_now;
-var freeUser = false, stepFree = 1;
-const blockFree = [
-    [[1], [1], [1], [1], [1]],
-    [[0, 1], [1, 1], [0, 1]],
-    [[1, 1], [1, 1]],
-    [[0, 1], [1, 1]],
-    [[1], [1, 1]],
-    [[1, 1], [1], [1]],
-    [[1, 1], [0, 1]],
-    [[1, 1]],
-    [[1], [1], [1], [1]],
-    [[1, 1], [1]],
-    [[1, 0], [1, 1], [1, 0]],
-    [[1, 1, 1, 1, 1]],
-    [[1, 1, 1, 1]],
-    [[1], [1], [1]],
-    [[1], [1]],
-    [[1, 1], [0, 1], [0, 1]],
-    [[1, 1, 1]],
-];
+var main = {}, dog, border, hand;
+var listBlock = [], listBlockUse = [], blockUse;
+var win = 0;
 
-const blockFreeHard = [
-    [[1, 1], [1], [1]],
-    [[1], [1], [1], [1], [1]],
-    [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
-    [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    [[1, 1], [0, 1], [0, 1]],
-    [[1, 1, 1, 1, 1]],
-];
-const level1 = {
-    "map":
-        [
-            [
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 6, 6, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, -1, 1, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 4, -1, -1, -1, -1, -1],
-                [2, 2, 2, -1, -1, 6, 6, 3, 3, 7],
-                [5, 5, 5, -1, -1, 6, 6, 6, 3, 7],
-                [-1, -1, -1, 7, 7, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 7, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 0, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 0, -1, -1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, 5, 5, 1, 1, 7, 3, 3, 3],
-                [-1, -1, 5, 5, 1, 4, 7, 3, 3, 3],
-                [-1, -1, -1, -1, -1, 4, 4, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 4, 4, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, 2, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, 2, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 0, 0, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, 6, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, 1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-            ],
-        ],
-    "step":
-        [
-            [
-                {
-                    "hint": [{ x: 4, y: 4 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 4, y: 6 }],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1], [1, 1]],
-                    "color": 7,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[0, 1], [1, 1]],
-                    "color": 6,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1, 1]],
-                    "color": 5,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1]],
-                    "color": 3,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1], [1, 1], [1]],
-                    "color": 3,
-                    "use": false
-                }
-            ],
-            [
-                {
-                    "hint": [{ x: 3, y: 4 }, { x: 4, y: 4 }, { x: 3, y: 5 }, { x: 4, y: 5 }],
-                    "block": [[1, 1], [1, 1],],
-                    "color": 0,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1, 1]],
-                    "color": 5,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1], [1, 1], [1]],
-                    "color": 3,
-                    "use": false
-                }
-            ],
-            [
-                {
-                    "hint": [{ x: 5, y: 4 }, { x: 6, y: 4 }, { x: 5, y: 5 }, { x: 5, y: 6 }],
-                    "block": [[1, 1], [1], [1]],
-                    "color": 0,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1], [1, 1]],
-                    "color": 7,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[0, 1], [1, 1]],
-                    "color": 6,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": true
-                }
-            ]
-        ]
-}
+var totalScore = 44;
+var score = 24;
 //game initialization
 async function gameinit() {
     createjs.RotationPlugin.install();
@@ -221,74 +54,39 @@ function setAnimation() {
         images: [queue.getResult("full_block")],
         framerate: 25,
         frames: [
-            [1, 1, 1028, 282, 0, -19, -24],
-            [1031, 1, 985, 984, 0, -22, -13],
-            [1, 285, 367, 137, 0, 0, -13],
-            [370, 285, 93, 102, 0, 0, 0],
-            [370, 389, 93, 93, 0, 0, 0],
-            [1, 424, 93, 93, 0, 0, 0],
-            [96, 424, 93, 93, 0, 0, 0],
-            [191, 424, 93, 93, 0, 0, 0],
-            [286, 484, 200, 53, 0, 0, 0],
-            [465, 285, 200, 53, 0, 0, 0],
-            [1, 519, 93, 93, 0, 0, 0],
-            [96, 519, 93, 93, 0, 0, 0],
-            [191, 519, 93, 93, 0, 0, 0],
-            [465, 340, 93, 93, 0, 0, 0],
-            [488, 435, 93, 93, 0, 0, 0]
+            [1, 1, 400, 711, 0, 0, 0],
+            [1, 714, 200, 53, 0, 0, 0],
+            [1, 769, 200, 53, 0, 0, 0],
+            [203, 714, 200, 53, 0, 0, 0],
+            [203, 769, 82, 105, 0, 0, 0],
+            [287, 769, 82, 82, 0, -6, -2],
+            [371, 769, 62, 79, 0, -1, 0],
+            [403, 1, 300, 223, 0, 0, 0],
+            [403, 226, 300, 223, 0, 0, 0],
+            [403, 451, 300, 223, 0, 0, 0],
+            [435, 676, 113, 164, 0, 0, 0],
+            [550, 676, 88, 115, 0, 0, 0],
+            [640, 676, 60, 108, 0, 0, 0]
         ],
 
         "animations": {
-            "bottom": { "frames": [0] },
-            "grid": { "frames": [1] },
-            "score": { "frames": [2] },
-            "hand_tut": { "frames": [3] },
-            "block_blue": { "frames": [4] },
-            "block_cyan": { "frames": [5] },
-            "block_green": { "frames": [6] },
-            "block_orange": { "frames": [7] },
-            "btn_again": { "frames": [8] },
-            "install_now": { "frames": [9] },
-            "block_pink": { "frames": [10] },
-            "block_purple": { "frames": [11] },
-            "block_red": { "frames": [12] },
-            "block_yellow": { "frames": [13] },
-            "square_hint": { "frames": [14] }
+            "background": { "frames": [0] },
+            "btn_again": { "frames": [1] },
+            "install_now": { "frames": [2] },
+            "play_now": { "frames": [3] },
+            "hand": { "frames": [4] },
+            "yellow_block": { "frames": [5] },
+            "purple_block": { "frames": [6] },
+            "bg": { "frames": [7] },
+            "border": { "frames": [8] },
+            "full": { "frames": [9] },
+            "blue_block": { "frames": [10] },
+            "orange_block": { "frames": [11] },
+            "red_block": { "frames": [12] }
         },
     });
     setBackground();
     stage.addChild(containerMain);
-    var map = level1.map[levelCurr];
-    game.map = setMap(map);
-    renderBlockHint();
-    renderGroupBlockDefault();
-    addHand()
-    addEvent();
-}
-function setMap(map) {
-    var locationArr = [];
-    for (let i = 0; i < map.length; i++) {
-        const row = map[i];
-        var x = game.block.width,
-            y = i * game.block.width;
-        var arr = [];
-        for (let j = 0; j < row.length; j++) {
-            var xb = j * x;
-            const color = map[i][j]
-            if (color >= 0) {
-                var colorstr = convertBlock(color);
-                var block = new createjs.Sprite(spriteSheet, colorstr);
-                block.scale = scale
-                block.x = 1.024 * xb + defaultX
-                block.y = 1.02 * y + defaultY
-                containerMain.addChild(block);
-                arr.push({ x: block.x, y: block.y, existing: true, block: block, color: null });
-            } else arr.push({ x: 1.024 * xb + defaultX, y: 1.02 * y + defaultY, existing: false, block: null, color: null });
-
-        }
-        locationArr.push(arr);
-    }
-    return locationArr;
 }
 function setStage() {
     canvas = document.getElementById("myCanvas");
@@ -299,304 +97,210 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
-    var bgText = new createjs.Shape();
-    bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height / 17);
-    var textE = new createjs.Text('New Block Puzzle 2021', "22px Impact", "#000000");
+    var bg = new createjs.Sprite(spriteSheet, "background");
+    bg.scaleX = stage.canvas.width / bg.getBounds().width;
+    bg.scaleY = stage.canvas.height / bg.getBounds().height;
+    stage.addChild(bg);
 
-    textE.scale = (stage.canvas.width / 2) / textE.getMeasuredWidth()
-    textE.x = (stage.canvas.width - textE.getMeasuredWidth() * textE.scale) / 2
-    textE.y = (stage.canvas.height / 17 - textE.getMeasuredHeight() * textE.scale) / 2
+    process.width = stage.canvas.width * 2.3 / 3
+    process.height = stage.canvas.height / 50
+    process.radius = stage.canvas.width / 50
+    process.realityWidth = (process.score / totalScore) * process.width
+    process.rStar = stage.canvas.height / 55
+    stage.addChild(processCr)
+    renderProcess()
+    updateProcess()
 
-    var grid = new createjs.Sprite(spriteSheet, "grid");
-    grid.scale = stage.canvas.width * 0.9 / grid.getBounds().width;
-    var residual = stage.canvas.width / 45;
-    scale = grid.scale;
-    grid.x = (stage.canvas.width - grid.getBounds().width * grid.scale) / 2 - residual;
+    dog = new createjs.Sprite(spriteSheet, "bg");
+    dog.scale = (stage.canvas.width * 2.2 / 3) / dog.getBounds().width
+    dog.x = (stage.canvas.width - dog.getBounds().width * dog.scale) / 2
+    dog.y = stage.canvas.height / 4.5;
+    main = { x: dog.x, y: dog.y, width: dog.getBounds().width * dog.scale, height: dog.getBounds().height * dog.scale, scale: dog.scale }
 
-    var score = new createjs.Sprite(spriteSheet, "score");
-    score.scale = scale;
-    score.x = (stage.canvas.width - score.getBounds().width * score.scale) / 2;
-    score.y = stage.canvas.height / 10;
-    grid.y = score.y + score.getBounds().height * score.scale - residual / 2;
+    border = new createjs.Sprite(spriteSheet, "border");
+    border.scale = main.scale;
+    border.x = main.x;
+    border.y = main.y;
 
-    defaultX = grid.x + stage.canvas.width / 27;
-    defaultY = grid.y + stage.canvas.height / 60;
+    stage.addChild(dog, border);
+    temp()
+    renderBlock()
+    addEvent()
 
-    var bottom = new createjs.Sprite(spriteSheet, "bottom");
-    bottom.scale = stage.canvas.width * 0.9 / bottom.getBounds().width;
-    bottom.x = (stage.canvas.width - bottom.getBounds().width * bottom.scale) / 2 - stage.canvas.width / 50;
-    bottom.y = grid.y + grid.getBounds().height * grid.scale + residual * 4;
-    storageBlock = {
-        height: bottom.getBounds().height * bottom.scale,
-        avgY: bottom.y + (bottom.getBounds().height * bottom.scale) / 1.65,
-        minX: bottom.x + stage.canvas.width / 10,
-        maxX: bottom.x + bottom.getBounds().width * bottom.scale - stage.canvas.width / 10
-    };
-    var block = new createjs.Sprite(spriteSheet, "block_blue");
-    game.block = { width: block.getBounds().width * scale };
-
-    hand_tut = new createjs.Sprite(spriteSheet, "hand_tut");
-
-    text_scores = new createjs.Text(scores, "22px Impact", "#ffffff");
-    text_scores.y = score.y + score.getBounds().height * score.scale
-    text_scores.scale = (stage.canvas.width / 37) / text_scores.getMeasuredWidth();
-    text_scores.textBaseline = "alphabetic";
-    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-
-    install_now = new createjs.Sprite(spriteSheet, "install_now");
-    install_now.scaleX = stage.canvas.width / 4.5 / install_now.getBounds().width;
-    install_now.scaleY = stage.canvas.width / 4.5 / install_now.getBounds().width;
-    install_now.x = (stage.canvas.width - install_now.getBounds().width * install_now.scaleX) / 2;
-    install_now.y = stage.canvas.height - install_now.getBounds().height * install_now.scaleY * 1.7;
-
-    stage.addChild(bgText, textE, score, grid, bottom, text_scores, install_now);
-    var install_nowx = install_now.x,
-        install_nowy = install_now.y,
-        install_nowscale = stage.canvas.width / 4.5 / install_now.getBounds().width;
-    createjs.Tween.get(install_now, { loop: true })
-        .to(
-            {
-                scale: (stage.canvas.width / 7) / install_now.getBounds().width,
-                x: (stage.canvas.width - ((stage.canvas.width / 7) / install_now.getBounds().width) * install_now.getBounds().width) / 2,
-                y: install_nowy - (stage.canvas.width / 7 - stage.canvas.width / 8) / 10,
-            },
-            500,
-            createjs.Ease.linear
-        )
-        .to({ scale: install_nowscale, x: install_nowx, y: install_nowy }, 500, createjs.Ease.linear);
-    install_now.addEventListener("click", () => { getLinkInstall() }, false);
+}
+function temp() {
+    var orange_block = new createjs.Sprite(spriteSheet, "orange_block");
+    orange_block.scale = main.scale
+    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale
+    orange_block.y = main.y
+    listBlock.push({ x: orange_block.x, y: orange_block.y })
+    var red_block = new createjs.Sprite(spriteSheet, "red_block");
+    red_block.scale = main.scale
+    red_block.x = orange_block.x + orange_block.getBounds().width * orange_block.scale - 2.98 / 4 * orange_block.getBounds().width * orange_block.scale - red_block.getBounds().width * red_block.scale
+    red_block.y = orange_block.y + orange_block.getBounds().height * orange_block.scale
+    listBlock.push({ x: red_block.x, y: red_block.y })
+    var purple_block = new createjs.Sprite(spriteSheet, "purple_block");
+    purple_block.scale = main.scale
+    purple_block.x = orange_block.x - purple_block.getBounds().width * purple_block.scale
+    purple_block.y = orange_block.y + 0.95 / 3 * orange_block.getBounds().height * orange_block.scale
+    listBlock.push({ x: purple_block.x, y: purple_block.y })
+    var blue_block = new createjs.Sprite(spriteSheet, "blue_block");
+    blue_block.scale = main.scale
+    blue_block.x = main.x
+    blue_block.y = main.y + main.height - blue_block.getBounds().height * blue_block.scale
+    listBlock.push({ x: blue_block.x, y: blue_block.y })
+    var yellow_block = new createjs.Sprite(spriteSheet, "yellow_block");
+    yellow_block.scale = main.scale
+    yellow_block.x = blue_block.x + 0.93 * blue_block.getBounds().width * blue_block.scale
+    yellow_block.y = blue_block.y - 0.02 * blue_block.getBounds().height * blue_block.scale
+    listBlock.push({ x: yellow_block.x, y: yellow_block.y })
 }
 
-//Group Block
-function renderGroupBlockDefault() {
-    if (!freeUser) {
-        var listStep = level1.step[levelCurr];
-        for (let i = 0; i < 3; i++) {
-            const step = listStep[i];
-            renderGroupBlock(step.block, step.color, i);
-        }
-        numGroup = 2
-    } else {
-        for (let i = 0; i < 3; i++) {
-            var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-            var color = Math.floor(Math.random() * 8)
-            renderGroupBlock(block, color, i);
-        }
+function renderProcess() {
+    var bg1 = new createjs.Shape();
+    bg1.graphics.s("#946885");
+    bg1.graphics.ss(3);
+    bg1.graphics.rc(0, 0, process.width, process.height, process.radius, process.radius, process.radius, process.radius);
+    bg1.x = (stage.canvas.width - process.width) / 2;
+    bg1.y = stage.canvas.height / 10;
+    process.x = bg1.x;
+    process.y = bg1.y;
+    processCr.addChild(bg1);
 
+    process.star = new createjs.Shape();
+    process.star.graphics.lf(["#ecbf6f", "#f8e953"], [0.7, 0.1], process.x, process.y + process.rStar / 2, process.x + process.rStar / 2, process.y + process.rStar / 3).drawPolyStar(process.x + process.rStar / 3, process.y + process.rStar / 2, process.rStar, 5, 0.6, 45);
+
+    process.text_IQ = new createjs.Text('IQ', "bold 22px Impact", "#ffffff");
+    process.text_IQ.x = process.x - process.rStar / 3
+    process.text_IQ.scaleX = (stage.canvas.width / 22) / process.text_IQ.getMeasuredWidth();
+    process.text_IQ.scaleY = process.text_IQ.scaleX * 0.8;
+    process.text_IQ.y = process.y - process.height / 1.5
+    process.text_IQ.textBaseline = "alphabetic";
+
+    process.text_scores = new createjs.Text(process.score + 81, "bold 22px Impact", "#ffffff");
+    process.text_scores.x = process.x
+    process.text_scores.scaleX = (stage.canvas.width / 15) / process.text_scores.getMeasuredWidth();
+    process.text_scores.scaleY = process.text_scores.scaleX * 0.8;
+    process.text_scores.y = process.y + process.height * 2.7
+    process.text_scores.textBaseline = "alphabetic";
+
+    stage.addChild(process.star, process.text_IQ, process.text_scores);
+}
+function updateProcess() {
+    processCr.removeChild(process.reality)
+    process.realityWidth = (process.score / totalScore) * process.width
+    process.reality = new createjs.Shape();
+    process.reality.graphics.s("#946885");
+    process.reality.graphics.ss(3);
+    process.reality.graphics.lf(["#47d4dd", "#4c43f1"], [0.7, 0.3], 0, process.height / 2, process.realityWidth, process.height / 2)
+    process.reality.graphics.rc(0, 0, process.realityWidth, process.height, process.radius, process.radius, process.radius, process.radius);
+    process.reality.x = process.x
+    process.reality.y = process.y
+    process.star.x = process.realityWidth - process.rStar / 1.7
+    processCr.addChild(process.reality);
+    process.text_IQ.x = process.realityWidth + process.x - process.rStar
+    process.text_scores.x = process.x + process.realityWidth - process.rStar * (0.8 + (process.score / totalScore))
+    process.text_scores.text = process.score + 81
+}
+function updateIQ() {
+    var upProcess = setInterval(function () {
+        process.score += 1
+        if (process.score <= score) updateProcess()
+        else clearInterval(upProcess);
+    }, 30);
+}
+function updateIQD() {
+    var upProcess = setInterval(function () {
+        process.score -= 1
+        if (process.score >= score) updateProcess()
+        else clearInterval(upProcess);
+    }, 30);
+}
+function renderBlock() {
+    var minY = main.y + main.height
+    var maxX = main.x + main.width
+
+    var yellow_block = new createjs.Sprite(spriteSheet, "yellow_block");
+    yellow_block.scale = main.scale
+    yellow_block.x = main.x + yellow_block.getBounds().width * yellow_block.scale / 10
+    yellow_block.y = minY + yellow_block.getBounds().height * yellow_block.scale / 1.5
+
+    var purple_block = new createjs.Sprite(spriteSheet, "purple_block");
+    purple_block.scale = main.scale
+    purple_block.x = yellow_block.x + yellow_block.getBounds().width * yellow_block.scale - purple_block.getBounds().width * purple_block.scale
+    purple_block.y = yellow_block.y + 1.7 * yellow_block.getBounds().height * yellow_block.scale
+
+
+    var blue_block = new createjs.Sprite(spriteSheet, "blue_block");
+    blue_block.scale = main.scale
+    blue_block.x = yellow_block.x + 0.8 * yellow_block.getBounds().width * yellow_block.scale
+    blue_block.y = yellow_block.y + 0.7 * yellow_block.getBounds().height * yellow_block.scale
+
+
+    var red_block = new createjs.Sprite(spriteSheet, "red_block");
+    red_block.scale = main.scale
+    red_block.x = maxX - red_block.getBounds().width * red_block.scale
+    red_block.y = minY + red_block.getBounds().height * red_block.scale / 2
+
+
+    var orange_block = new createjs.Sprite(spriteSheet, "orange_block");
+    orange_block.scale = main.scale
+    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale
+    orange_block.y = red_block.y + 1.1 * red_block.getBounds().height * red_block.scale
+
+
+    stage.addChild(orange_block, red_block, purple_block, blue_block, yellow_block)
+
+    listBlockUse = [{ x: orange_block.x, y: orange_block.y, block: orange_block },
+    { x: red_block.x, y: red_block.y, block: red_block },
+    { x: purple_block.x, y: purple_block.y, block: purple_block },
+    { x: blue_block.x, y: blue_block.y, block: blue_block },
+    { x: yellow_block.x, y: yellow_block.y, block: yellow_block }]
+    for (let i = 0; i < listBlockUse.length; i++) {
+        const blocks = listBlockUse[i];
+        blocks.block.addEventListener("mousedown", () => { onMouseDown({ target: blocks, index: i }) });
     }
-}
-function createGroupBlock() {
-    switch (groupCurr) {
-        case 0:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
-            var gr2w = blockUse[groupCurr + 2].width * (storageBlock.height / 6.5);
-            var gr1 = blockUse[groupCurr + 1].target;
-            var gr2 = blockUse[groupCurr + 2].target;
-            blockUse[groupCurr] = blockUse[groupCurr + 1]
-            blockUse[groupCurr].x = indexGroup.x0 + (storageBlock.height / 6.5)
-            blockUse[groupCurr + 1] = blockUse[groupCurr + 2]
-            blockUse[groupCurr + 1].x = indexGroup.x1 - gr2w / 2
-            createjs.Tween.get(gr1)
-                .to({ x: blockUse[groupCurr].x, y: blockUse[groupCurr].y }, 100)
-            createjs.Tween.get(gr2)
-                .to({ x: blockUse[groupCurr + 1].x, y: blockUse[groupCurr + 1].y }, 100)
-            break;
-        case 1:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
-            var gr1 = blockUse[groupCurr + 1].target;
-            blockUse[groupCurr] = blockUse[groupCurr + 1]
-            blockUse[groupCurr].x = indexGroup.x1 - gr1w / 2
-            createjs.Tween.get(gr1)
-                .to({ x: blockUse[groupCurr].x, y: blockUse[groupCurr].y }, 100)
-            break;
-    }
-    if (!freeUser) {
-        const step = level1.step[levelCurr][numGroup];
-        renderGroupBlock(step.block, step.color);
-    } else {
-        var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-        var color = Math.floor(Math.random() * 8)
-        renderGroupBlock(block, color);
-    }
-}
-function renderGroupBlock(blockArr, color, index) {
-    if (index == null) index = 2;
-    var colorstr = convertBlock(color);
-    var block = new createjs.Sprite(spriteSheet, colorstr);
-    block.scale = (storageBlock.height / 6.5) / block.getBounds().width;
-    var colContainer = blockArr[0].length;
-    var size = block.scale * block.getBounds().width;
 
-    var arr = [];
-    var containerBlockUse = new createjs.Container();
-    for (let i = 0; i < blockArr.length; i++) {
-        for (let j = 0; j < blockArr[i].length; j++) {
-            if (blockArr[i][j] == 1) {
-                var blockClone = block.clone();
-                blockClone.y = i * size;
-                blockClone.x = j * size;
-                containerBlockUse.addChild(blockClone);
-            }
-        }
-        if (colContainer < blockArr[i].length) colContainer = blockArr[i].length;
-        arr.push({ x: blockClone.x, y: blockClone.y });
-    }
-    var heightContainer = blockArr.length * block.getBounds().height * block.scale;
-    var widthContainer = colContainer * block.getBounds().width * block.scale;
 
-    containerBlockUse.y = storageBlock.avgY - heightContainer / 2;
-    containerBlockUse.x = index == 0 ? storageBlock.minX : index == 1 ? (storageBlock.maxX + storageBlock.minX - widthContainer + stage.canvas.width / 40) / 2 : storageBlock.maxX - widthContainer;
-    indexGroup = {
-        x0: storageBlock.minX,
-        x1: (storageBlock.maxX + storageBlock.minX + stage.canvas.width / 40) / 2,
-        x2: storageBlock.maxX
-    };
-    stage.addChild(containerBlockUse);
-
-    var groupBlock = {
-        target: containerBlockUse,
-        x: containerBlockUse.x,
-        y: containerBlockUse.y,
-        width: colContainer,
-        height: blockArr.length,
-        scale: containerBlockUse.scale,
-        color: color
-    };
-    // if (blockUse.length == 3) blockUse[2] = groupBlock;
-    // else 
-    blockUse.push(groupBlock);
-
+    hand = new createjs.Sprite(spriteSheet, "hand");
+    hand.scale = main.scale / 1.3
+    hand.x = red_block.x + red_block.getBounds().width * red_block.scale / 3
+    hand.y = red_block.y + red_block.getBounds().height * red_block.scale / 2.2
+    // hand.y = stage.canvas.height
+    stage.addChild(hand)
+    createjs.Tween.get(hand, { loop: true })
+        .to({
+            x: listBlock[1].x + red_block.getBounds().width * red_block.scale / 6,
+            y: listBlock[1].y + red_block.getBounds().height * red_block.scale / 2.2
+        }, 400, createjs.Ease.linear)
+        .wait(100)
+        .to({
+            x: red_block.x + red_block.getBounds().width * red_block.scale / 3,
+            y: red_block.y + red_block.getBounds().height * red_block.scale / 2.2
+        }, 700, createjs.Ease.linear)
+        .wait(100)
 }
-function blockToContainer() {
-    var indexHint = getIndexHint();
-    var blockChild = blockUse[groupCurr].target.children
-    scores += blockChild.length * 10
-    text_scores.text = scores;
-    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
 
-    const color = blockUse[groupCurr].color;
-    var colorstr = convertBlock(color);
-    var blocknew = new createjs.Sprite(spriteSheet, colorstr);
-    blocknew.scale = scale;
-    for (let i = 0; i < blockChild.length; i++) {
-        var block = blockChild[i];
-        var index1 = lToIGr({ x: block.x, y: block.y });
-        var x = indexHint.minX + index1.x;
-        var y = indexHint.minY + index1.y;
-        var item = game.map[y][x];
-        var newblock = blocknew.clone();
-        newblock.x = item.x;
-        newblock.y = item.y;
-        containerMain.addChild(newblock);
-        containerNew.push({ x: x, y: y });
-        game.map[y][x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color };
-
-    }
-    blockUse[groupCurr].target.removeAllChildren()
-    stage.removeChild(blockUse[groupCurr].target)
-}
-function removeGrBlock() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const grBlock = blockUse[i];
-        stage.removeChild(grBlock.target)
-    }
-    blockUse = []
-}
-function addHand() {
-    hand_tut.x = blockUse[0].x;
-    hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5;
-    hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
-    stage.addChild(hand_tut);
-    createjs.Tween.get(hand_tut, { loop: true })
-        .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 1500)
-        .wait(300)
-        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5 }, 1500)
-        .wait(300)
-}
 function removeHand() {
-    createjs.Tween.removeTweens(hand_tut);
-    stage.removeChild(hand_tut)
+    createjs.Tween.removeTweens(hand);
+    stage.removeChild(hand)
 }
-
-//Hint Block
-function renderBlockHint() {
-    groupHint.removeAllChildren()
-    var hint = new createjs.Sprite(spriteSheet, "square_hint");
-    hint.scale = scale;
-    const hintArr = level1.step[levelCurr][hintCurr].hint;
-    for (let i = 0; i < hintArr.length; i++) {
-        var item = hintArr[i];
-        var blockHint = hint.clone();
-        var index = game.map[item.y][item.x];
-        blockHint.x = index.x;
-        blockHint.y = index.y;
-        groupHint.addChild(blockHint);
+function removeEvent() {
+    for (let i = 0; i < listBlockUse.length; i++) {
+        const block = listBlockUse[i].block;
+        block._listeners = {}
+        block.removeEventListener("mousedown", () => { onMouseDown() });
     }
-    containerMain.addChild(groupHint);
-    if (level1.step[levelCurr][hintCurr].hint.length != 0) indexHint = getIndexHint();
-
-}
-function getIndexHint() {
-    var currStep = level1.step[levelCurr][hintCurr].hint;
-    var minX = currStep[0].x;
-    var maxX = currStep[0].x;
-    var minY = currStep[0].y;
-    var maxY = currStep[0].y;
-    for (let i = 0; i < currStep.length; i++) {
-        const item = currStep[i];
-        if (item.x < minX) minX = item.x;
-        if (item.x > maxX) maxX = item.x;
-        if (item.y < minY) minY = item.y;
-        if (item.y > maxY) maxY = item.y;
-    }
-    var index = game.map[minY][minX];
-    return { minX: minX, minY: minY, maxX: maxX, maxY: maxY, realityX: index.x, realityY: index.y };
 }
 
 //Event
 function addEvent() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (isMobile) {
-            target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-            target.myParam = i;
-        } else {
-            target.addEventListener("mousedown", onMouseDown);
-            canvas.addEventListener("mousemove", onPressMove);
-            canvas.addEventListener("mouseup", onMouseUp);
-            target.myParam = i;
-        }
-    }
-}
-function removeEvent(target) {
     if (isMobile) {
-        target.removeEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-        canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-        canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
+        canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+        canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
     } else {
-        target.removeEventListener("mousedown", onMouseDown);
-        canvas.removeEventListener("mousemove", onPressMove);
-        canvas.removeEventListener("mouseup", onMouseUp);
-    }
-}
-function removeAllEvent() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (isMobile) {
-            if (target) {
-                target.removeEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
-            }
-        } else {
-            if (target) {
-                target.removeEventListener("mousedown", onMouseDown);
-                canvas.removeEventListener("mousemove", onPressMoveFree);
-                canvas.removeEventListener("mouseup", onMouseUpFree);
-            }
-        }
+        canvas.addEventListener("mousemove", onPressMove);
+        canvas.addEventListener("mouseup", onMouseUp);
     }
 }
 function detectMobile() {
@@ -620,341 +324,163 @@ function detectMobile() {
     }
     return false;
 }
-function onMouseDown(evt) {
+function onMouseDown(block) {
     pressMove = true;
-    var location = currentMouse(evt);
-    groupCurr = evt.currentTarget.myParam;
-    distanceGTH = getDistance(location, { x: indexHint.realityX, y: indexHint.realityY })
+    blockUse = block
 }
 function onPressMove(evt) {
     if (pressMove) {
+        pressUp = true
+        var target = blockUse.target.block
         var location = currentMouse(evt);
-        var target = blockUse[groupCurr].target;
-        target.x = location.x;
-        target.y = location.y;
-        var scaleItem = blockUse[groupCurr].target.children[0].scale;
-        var distance = getDistance(location, { x: indexHint.realityX, y: indexHint.realityY });
-        var percent = distance / distanceGTH - 1;
-        newScaleGroup = scale / scaleItem;
-        if (newScaleGroup * Math.abs(percent) > blockUse[groupCurr].scale) {
-            target.scale = newScaleGroup * Math.abs(percent);
-        }
+        target.x = location.x - target.getBounds().width / 2
+        target.y = location.y - target.getBounds().height / 2
     }
-
 }
 function onMouseUp(evt) {
     pressMove = false;
-    var location = currentMouse(evt);
-    var target = blockUse[groupCurr].target;
-    var standard = { x: indexHint.realityX, y: indexHint.realityY }
-    if (target.x >= standard.x - game.block.width / 2 && target.x <= standard.x + game.block.width / 2 && groupCurr == 0) {
-        if (target.y >= standard.y - game.block.width / 2 && target.y <= standard.y + game.block.width / 2) {
-            removeEvent(target);
-            if (level1.step[levelCurr][hintCurr + 1].hint.length != 0) {
-                hintCurr++;
-                numGroup++;
-                blockToContainer()
-                createGroupBlockFree();
-                removeBlock(0);
-                if (hintCurr == 1) removeHand();
-            } else {
-                removeHand()
-                blockToContainer()
-                groupHint.removeAllChildren()
-                removeBlock(1);
-            }
-        } else {
-            target.x = blockUse[groupCurr].x;
-            target.y = blockUse[groupCurr].y;
-            target.scale = blockUse[groupCurr].scale;
-        }
-    } else {
-        target.x = blockUse[groupCurr].x;
-        target.y = blockUse[groupCurr].y;
-        target.scale = blockUse[groupCurr].scale;
-    }
-}
-
-// Free
-function addEventFree() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (isMobile) {
-            if (target) {
-                target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
-                target.myParam = i;
-            }
-        } else {
-            if (target) {
-                target.addEventListener("mousedown", onMouseDown);
-                canvas.addEventListener("mousemove", onPressMoveFree);
-                canvas.addEventListener("mouseup", onMouseUpFree);
-                target.myParam = i;
-            }
-        }
-    }
-}
-function onPressMoveFree(evt) {
-    if (pressMove) {
+    if (pressUp) {
         var location = currentMouse(evt);
-        var target = blockUse[groupCurr].target;
-        target.x = location.x;
-        target.y = location.y;
-        var scaleItem = blockUse[groupCurr].target.children[0].scale;
-        newScaleGroup = scale / scaleItem;
-        var percent
-        if (location.y > game.map[9][0].y + game.block.width) {
-            var distance = location.y - (game.map[9][0].y + game.block.width);
-            percent = distance / distanceGTH - 1;
-        }
-        if (newScaleGroup * Math.abs(percent) > blockUse[groupCurr].scale) {
-            target.scale = newScaleGroup * Math.abs(percent);
-        }
-        renderHintFree(location)
-    }
-}
-function onMouseUpFree(evt) {
 
-    pressMove = false;
-    containerNew = []
-    // var location = currentMouse(evt);
-    var target = blockUse[groupCurr].target;
-    if (hintFree.length != 0) {
-        scores += hintFree.length * 10
-        text_scores.text = scores;
-        text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-        removeHand()
-        removeEvent(target);
-        const color = blockUse[groupCurr].color;
-        var colorstr = convertBlock(color);
-        var block = new createjs.Sprite(spriteSheet, colorstr);
-        block.scale = scale;
-        for (let i = 0; i < hintFree.length; i++) {
-            const hint = hintFree[i].hint;
-            const item = game.map[hintFree[i].y][hintFree[i].x]
-            var newblock = block.clone()
-            newblock.x = hint.x
-            newblock.y = hint.y
-            containerMain.addChild(newblock);
-            containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
-            game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color }
-        }
-        removeBlock(2);
-        blockUse[groupCurr].target.removeAllChildren()
-        stage.removeChild(blockUse[groupCurr].target)
-        blockUse[groupCurr].target = null
-        createGroupBlockFree();
-        addEventFree();
-        endGame();
-    } else {
-        target.x = blockUse[groupCurr].x;
-        target.y = blockUse[groupCurr].y;
-        target.scale = blockUse[groupCurr].scale;
-    }
-}
-function renderHintFree(location) {
-    var array = [];
-    var render = true
-    removeHintFree()
-    var index = lToI(location)
-    var blockChild = blockUse[groupCurr].target.children
-    var hint = new createjs.Sprite(spriteSheet, "square_hint");
-    hint.scale = scale;
-    if (location.x >= game.map[0][0].x - game.block.width / 2 &&
-        location.x < game.map[0][9].x + (1.5 - blockUse[groupCurr].width) * game.block.width &&
-        location.y > game.map[0][0].y &&
-        location.y < game.map[9][0].y + (1.5 - blockUse[groupCurr].height) * game.block.width) {
-        hintFree = []
-        for (let i = 0; i < blockChild.length; i++) {
-            var block = blockChild[i];
-            var index1 = lToIGr({ x: block.x, y: block.y })
-            var x = index.x + index1.x
-            var y = index.y + index1.y
-            var item = game.map[y][x]
-            if (!item.existing) {
-                array.push({ x: x, y: y })
-            } else render = false
-        }
-    } else {
-        hintFree = []
-    }
-    if (render) {
-        for (let i = 0; i < array.length; i++) {
-            const index = array[i];
-            var item = game.map[index.y][index.x]
-            var newHint = hint.clone()
-            newHint.x = item.x;
-            newHint.y = item.y;
-            containerMain.addChild(newHint);
-            hintFree.push({ x: index.x, y: index.y, hint: newHint })
-        }
-    }
-}
-function removeHintFree() {
-    for (let i = 0; i < hintFree.length; i++) {
-        const hint = hintFree[i].hint;
-        containerMain.removeChild(hint)
-    }
-}
-function createGroupBlockFree() {
-    var render = true
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (target != null) render = false
-    }
-    if (render) {
-        stepFree++
-        if (stepFree < 8) {
-            for (let i = 0; i < 3; i++) {
-                var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-                var color = Math.floor(Math.random() * 8)
-                renderGroupBlock(block, color, i);
+        var target = blockUse.target.block
+        index = listBlock[blockUse.index]
+        if (target.x >= index.x - target.getBounds().width / 3 && target.x <= index.x + target.getBounds().width / 3) {
+            if (target.y >= index.y - target.getBounds().height / 3 && target.y <= index.y + target.getBounds().height / 3) {
+                removeHand()
+                target.x = index.x
+                target.y = index.y
+                win += 1
+                if (score < totalScore) score += 4
+                updateIQ()
+                setStar()
+            } else {
+                target.x = listBlockUse[blockUse.index].x
+                target.y = listBlockUse[blockUse.index].y
+                score -= 4
+                updateIQD()
+                gameClose()
             }
         } else {
-            for (let i = 0; i < 3; i++) {
-                var block = blockFreeHard[Math.floor(Math.random() * blockFreeHard.length)]
-                var color = Math.floor(Math.random() * 8)
-                renderGroupBlock(block, color, i);
-            }
+            target.x = listBlockUse[blockUse.index].x
+            target.y = listBlockUse[blockUse.index].y
+            score -= 4
+            updateIQD()
+            gameClose()
         }
+        pressUp = false
 
     }
 }
-
-//Collision
-function removeBlock(remove) {
-    const removeArray = checkRC()
-    var removeArr = removeArray.arr
-    scores += removeArray.lengthRemove * 15
-    text_scores.text = scores;
-    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-
-    if (remove == 0) {
-        addEvent();
-        renderBlockHint();
-    } else if (remove == 2) {
-        removeHintFree();
-        hintFree = [];
-    }
-    for (let i = 0; i < removeArr.length; i++) {
-        const index = removeArr[i];
-        const item = game.map[index.y][index.x]
-        const block = item.block;
-        block.regX = block.regY = game.block.width / 2
-        block.x = block.x + game.block.width / 4
-        block.y = block.y + game.block.width / 4
-        createjs.Tween.get(block)
-            .to({ rotation: 180, scale: 0 }, 500)
-            .call(() => {
-                containerMain.removeChild(block);
-                if (i == removeArr.length - 1) {
-                    if (remove == 1) newLevel()
-                }
-            });
-        game.map[index.y][index.x] = { x: item.x, y: item.y, existing: false, block: null, color: null }
+function tick(event) {
+    if (update) {
+        updateParticles();
+        stage.update(event);
     }
 }
-function newLevel() {
-    if (levelCurr + 1 <= level1.map.length - 2) {
-        containerMain.removeAllChildren()
-        removeGrBlock()
-        hintCurr = 0
-        levelCurr++
-        var map = level1.map[levelCurr];
-        game.map = setMap(map);
-        renderBlockHint();
-        renderGroupBlockDefault();
-        addHand()
-        addEvent();
-    } else {
-        freeUser = true
-        containerMain.removeAllChildren()
-        removeGrBlock()
-        var map = level1.map[3];
-        game.map = setMap(map);
-        renderGroupBlockDefault()
-        addEventFree();
-    }
-}
-// check row and column
-function checkRC() {
-    var checkX = [];
-    var checkY = [];
-    for (let i = 0; i < containerNew.length; i++) {
-        var item = containerNew[i];
-        if (checkX.indexOf(item.x) < 0) checkX.push(item.x);
-        if (checkY.indexOf(item.y) < 0) checkY.push(item.y);
-    }
-    var arrRemove = [];
-    var arrtemp = [];
-    var array = [];
-    for (let i = 0; i < checkX.length; i++) {
-        const x = checkX[i];
-        for (let y = 0; y < 10; y++) {
-            const item = game.map[y][x];
-            if (item.existing) arrtemp.push({ x: x, y: y });
-        }
-        if (arrtemp.length == 10) arrRemove = arrRemove.concat(arrtemp);
-        arrtemp = [];
-    }
-    for (let i = 0; i < checkY.length; i++) {
-        const y = checkY[i];
-        for (let x = 0; x < 10; x++) {
-            const item = game.map[y][x];
-            if (item.existing) arrtemp.push({ x: x, y: y });
-        }
-        if (arrtemp.length == 10) arrRemove = arrRemove.concat(arrtemp);
-        arrtemp = [];
-    }
-    for (let i = 0; i < arrRemove.length; i++) {
-        var add = true;
-        const item = arrRemove[i];
-        for (let j = 0; j < array.length; j++) {
-            const element = array[j];
-            if (item.x == element.x && item.y == element.y) add = false
-        }
-        if (add) array.push(item)
+//Support
+function gameClose() {
+    if (win < 5 && score <= 0) {
+        removeEvent()
+        listBlockUse.forEach(blocks => {
+            createjs.Tween.get(blocks.block)
+                .to(
+                    { x: blocks.x, y: blocks.y }, 200, createjs.Ease.linear
+                )
+        });
 
-    }
-    return { arr: array, lengthRemove: arrRemove.length }
-}
+        var shape = new createjs.Shape();
+        shape.graphics.f("#fafafa").dr(0, 0, stage.canvas.width, stage.canvas.height);
+        shape.alpha = 0.4
 
-function endGame() {
-    var close = checkLose();
-    if (close) {
-        stage.removeChild(install_now);
-        removeAllEvent()
-        var particle = new createjs.Shape();
-        particle.graphics.f("#fafafa").dr(0, 0, stage.canvas.width, stage.canvas.height);
-        particle.alpha = 0.4
 
         var bgcore = new createjs.Shape();
-        bgcore.graphics.f("#000000").rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
+
+        bgcore.graphics.s("#18236b");
+        bgcore.graphics.ss(3);
+        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5)
+        bgcore.graphics.rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
         bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
-        bgcore.y = stage.canvas.height / 5
-        bgcore.alpha = 1
+        bgcore.y = stage.canvas.height / 4
 
 
-        var best = new createjs.Text('BEST', "22px Impact", "#ffffff");
+        var fail = new createjs.Text('FAILED ', "Italic 30px Impact", "#ffffff");
 
-        best.scale = (stage.canvas.width / 10) / best.getMeasuredWidth()
+        fail.scale = (stage.canvas.width / 3) / fail.getMeasuredWidth()
+        fail.x = (stage.canvas.width - fail.getMeasuredWidth() * fail.scale) / 2
+        fail.y = bgcore.y + (stage.canvas.height / 5) / 3 - fail.getMeasuredHeight() * fail.scale / 2
+
+        var full = new createjs.Sprite(spriteSheet, "full");
+        full.scale = (stage.canvas.width / 7) / full.getBounds().width
+        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2
+        full.y = fail.y + fail.getMeasuredHeight() * fail.scale + full.getBounds().height * full.scale / 3
+
+        var containerfail = new createjs.Container();
+        containerfail.y = - bgcore.y - stage.canvas.height / 4
+        containerfail.addChild(bgcore, fail, full)
+
+        var play_again = new createjs.Sprite(spriteSheet, "btn_again");
+        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
+        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
+        play_again.y = stage.canvas.height
+
+        var play_againx = play_again.x,
+            play_againy = bgcore.y + stage.canvas.height / 5 + play_again.getBounds().height * play_again.scale * 2.5,
+            play_againscale = stage.canvas.width / 2.7 / play_again.getBounds().width;
+
+        createjs.Tween.get(play_again)
+            .to(
+                { y: play_againy }, 500, createjs.Ease.linear
+            ).call(() => {
+                createjs.Tween.get(play_again, { loop: true })
+                    .to(
+                        {
+                            scale: (stage.canvas.width / 3) / play_again.getBounds().width,
+                            x: (stage.canvas.width - ((stage.canvas.width / 3) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
+                            y: play_againy - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
+                        },
+                        500,
+                        createjs.Ease.linear
+                    )
+                    .to({ scale: play_againscale, x: play_againx, y: play_againy }, 500, createjs.Ease.linear);
+            })
+        play_again.addEventListener("click", () => { getLinkInstall() }, false);
+
+        stage.addChild(shape, containerfail, play_again)
+        createjs.Tween.get(containerfail)
+            .to({ y: 0 }, 500, createjs.Ease.linear)
+    }
+}
+function setStar() {
+    if (win == 5) {
+        removeEvent()
+        setInterval(emitParticles, Math.random() * 700 + 300);
+        setInterval(emitParticles, Math.random() * 700 + 300);
+
+        var bgcore = new createjs.Shape();
+
+        bgcore.graphics.s("#18236b");
+        bgcore.graphics.ss(3);
+        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5)
+        bgcore.graphics.rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
+        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
+        bgcore.y = stage.canvas.height / 4
+
+        var best = new createjs.Text('Your IQ ', "22px Impact", "#ffffff");
+
+        best.scale = (stage.canvas.width / 6) / best.getMeasuredWidth()
         best.x = (stage.canvas.width - best.getMeasuredWidth() * best.scale) / 2
         best.y = bgcore.y + best.getMeasuredHeight() * best.scale * 1.4
 
-        var text = text_scores.clone()
+        var text = new createjs.Text(score + 81, "22px Impact", "#ffffff");
         text.scale = (stage.canvas.width / 7) / text.getMeasuredWidth()
         text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
-        text.y = bgcore.y * 2 - text.getMeasuredHeight() * text.scale * 1.2
+        text.y = bgcore.y + stage.canvas.height / 5 - text.getMeasuredHeight() * text.scale * 1.6
 
 
         var play_again = new createjs.Sprite(spriteSheet, "btn_again");
         play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
         play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
-        play_again.y = text.y + play_again.getBounds().height * play_again.scale * 2.5
-
-        stage.addChild(particle, bgcore, best, text, play_again);
+        play_again.y = text.y + text.getMeasuredHeight() * text.scale + play_again.getBounds().height * play_again.scale * 2.5
 
         var play_againx = play_again.x,
             play_againy = play_again.y,
@@ -962,8 +488,8 @@ function endGame() {
         createjs.Tween.get(play_again, { loop: true })
             .to(
                 {
-                    scale: (stage.canvas.width / 4) / play_again.getBounds().width,
-                    x: (stage.canvas.width - ((stage.canvas.width / 4) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
+                    scale: (stage.canvas.width / 3) / play_again.getBounds().width,
+                    x: (stage.canvas.width - ((stage.canvas.width / 3) / play_again.getBounds().width) * play_again.getBounds().width) / 2,
                     y: play_againy - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
                 },
                 500,
@@ -971,78 +497,76 @@ function endGame() {
             )
             .to({ scale: play_againscale, x: play_againx, y: play_againy }, 500, createjs.Ease.linear);
         play_again.addEventListener("click", () => { getLinkInstall() }, false);
+        removeBlock()
+        stage.removeChild(dog, border)
+        var full = new createjs.Sprite(spriteSheet, "full");
+        full.scale = (stage.canvas.width * 2.2 / 3) / full.getBounds().width
+        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2
+        full.y = stage.canvas.height / 4.5;
 
+        stage.addChild(full, bgcore, best, text, play_again)
+
+        createjs.Tween.get(full)
+            .to(
+                {
+                    scale: (stage.canvas.width / 2) / dog.getBounds().width,
+                    x: (stage.canvas.width - stage.canvas.width / 2) / 2,
+                    y: play_again.y + play_again.getBounds().height * play_again.scale * 2
+                },
+                500,
+                createjs.Ease.linear
+            )
 
     }
 }
-function checkLose() {
-    var mainGr = [];
-    var close = false;
-    for (let i = 0; i < blockUse.length; i++) {
-        if (blockUse[i].target != null) {
-            const blockChild = blockUse[i].target.children;
-            var indexChild = [];
-            for (let i = 0; i < blockChild.length; i++) {
-                var block = blockChild[i];
-                var index = lToIGr({ x: block.x, y: block.y });
-                indexChild.push(index)
-            }
-            mainGr.push(indexChild)
+function removeBlock() {
+    listBlockUse.forEach(blocks => {
+        stage.removeChild(blocks.block)
+    });
+}
+
+var particles = [];
+const MAX_LIFE = 100;
+var count = 0;
+function emitParticles() {
+    var fire_x = Math.floor(Math.random() * stage.canvas.width);
+    var circle_r = Math.round(Math.random() * stage.canvas.width * 0.01 + stage.canvas.width * 0.006);
+    var a = Math.floor(Math.random() * 2);
+    var fire_y = a == 0 ? Math.floor((Math.random() * stage.canvas.height) / 5) - stage.canvas.height / 30 : Math.floor((Math.random() * stage.canvas.height) / 10) + (stage.canvas.height * 2) / 5;
+    for (var i = 0; i < 180; i += 5) {
+        var particle = new createjs.Shape();
+        particle.graphics.beginFill(createjs.Graphics.getHSL(0, 75, 75)).drawPolyStar(100, 100, circle_r, 5, 0.6, 0);
+        particle.x = fire_x;
+        particle.y = fire_y;
+        particle.regX = particle.regY = 100;
+        particle.compositeOperation = "lighter";
+        stage.addChild(particle);
+        var angle = i + 1;
+        var pow = Math.random() * stage.canvas.width * 0.02 + stage.canvas.width * 0.007;
+        particle.vx = pow * Math.cos((angle * 5 * Math.PI) / 180);
+        particle.vy = pow * Math.sin((angle * 5 * Math.PI) / 180);
+        particle.life = MAX_LIFE;
+        particles.push(particle);
+    }
+}
+function updateParticles() {
+    for (var i = 0; i < particles.length; i++) {
+        var particle = particles[i];
+        particle.vy += 0.3;
+        particle.vx *= 0.9;
+        particle.vy *= 0.9;
+        particle.x += particle.vx - 0.9;
+        particle.y += particle.vy;
+        var scale = particle.life / MAX_LIFE;
+        particle.scaleX = particle.scaleY = scale;
+        particle.life -= 1;
+        particle.rotation -= 4;
+        if (particle.life <= 0) {
+            stage.removeChild(particle);
+            particles.splice(i, 1);
         }
     }
-    var map = game.map
-    for (let y = 0; y < map.length; y++) {
-        for (let x = 0; x < map[y].length; x++) {
-            const item = map[y][x];
-            if (!item.existing) {
-                for (let i = 0; i < mainGr.length; i++) {
-                    var grTrue = true;
-                    for (let j = 0; j < mainGr[i].length; j++) {
-                        const index = mainGr[i][j];
-                        var indexGrX = x + index.x
-                        var indexGrY = y + index.y
-                        if (indexGrY > 9 || indexGrX > 9) grTrue = false
-                        else {
-                            var block = map[indexGrY][indexGrX]
-                            if (block.existing) grTrue = false
-                        }
-                    }
-                    if (grTrue) {
-                        close = true
-                        break;
-                    }
-                }
-            }
-
-        }
-    }
-    return !close
 }
-// location to index
-function lToI(location) {
-    var x = (location.x - defaultX) / game.block.width * 1.024;
-    var y = (location.y - defaultY) / game.block.width * 1.02;
-    if (y < 0) y = 0
-    return { x: Math.floor(x), y: Math.floor(y) };
-}
-function lToIGr(location) {
-    var x = location.x / (storageBlock.height / 6.5);
-    var y = location.y / (storageBlock.height / 6.5);
-    return { x: Math.floor(x), y: Math.floor(y) };
-}
-function indexToLocation(p) {
-    var x = p.x * game.block.width + defaultX + p.x * game.block.width * 0.024;
-    var y = p.y * game.block.width + defaultY + (p.y * game.block.width + defaultY) * 0.02;
-    return { x: x, y: y };
-}
-
-function tick(event) {
-    if (update) {
-        stage.update(event);
-    }
-}
-
-//Support
 function getLinkInstall() {
     var userAgent = navigator.userAgent || navigator.vendor || window.opera;
     if (/windows phone/i.test(userAgent)) {
@@ -1055,30 +579,6 @@ function getLinkInstall() {
         window.open("https://play.google.com/store/apps/details?id=com.blockpuzzle.galaxy.bluedream.puzzle")
     }
 
-}
-function convertBlock(id) {
-    switch (id) {
-        case 0:
-            return "block_blue";
-        case 1:
-            return "block_cyan";
-        case 2:
-            return "block_green";
-        case 3:
-            return "block_orange";
-        case 4:
-            return "block_pink";
-        case 5:
-            return "block_purple";
-        case 6:
-            return "block_red";
-        case 7:
-            return "block_yellow";
-        case 100:
-            return "square_hint";
-        default:
-            return null;
-    }
 }
 function getDistance(p1, p2) {
     var a = p1.x - p2.x;

@@ -307,10 +307,10 @@ function renderBlock() {
     createjs.Tween.get(hint, { loop: true })
         .to({
             alpha: 0.1
-        }, 600, createjs.Ease.linear)
+        }, 700, createjs.Ease.linear)
         .to({
             alpha: 1
-        }, 600, createjs.Ease.linear)
+        }, 500, createjs.Ease.linear)
 }
 
 function removeHand() {

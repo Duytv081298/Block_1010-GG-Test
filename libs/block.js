@@ -103,76 +103,71 @@ function setBackground() {
     bg.scaleY = stage.canvas.height / bg.getBounds().height;
     stage.addChild(bg);
 
-    process.width = stage.canvas.width * 2.3 / 3
-    process.height = stage.canvas.height / 50
-    process.radius = stage.canvas.width / 50
-    process.realityWidth = (process.score / totalScore) * process.width
-    process.rStar = stage.canvas.height / 55
-    stage.addChild(processCr)
-    renderProcess()
-    updateProcess()
+    process.width = stage.canvas.width * 2.3 / 3;
+    process.height = stage.canvas.height / 50;
+    process.radius = stage.canvas.width / 50;
+    process.realityWidth = (process.score / totalScore) * process.width;
+    process.rStar = stage.canvas.height / 55;
+    stage.addChild(processCr);
+    renderProcess();
+    updateProcess();
 
     dog = new createjs.Sprite(spriteSheet, "bg");
-    dog.scale = (stage.canvas.width * 2.2 / 3) / dog.getBounds().width
-    dog.x = (stage.canvas.width - dog.getBounds().width * dog.scale) / 2
+    dog.scale = (stage.canvas.width * 2.2 / 3) / dog.getBounds().width;
+    dog.x = (stage.canvas.width - dog.getBounds().width * dog.scale) / 2;
     dog.y = stage.canvas.height / 4.5;
-    main = { x: dog.x, y: dog.y, width: dog.getBounds().width * dog.scale, height: dog.getBounds().height * dog.scale, scale: dog.scale }
+    main = { x: dog.x, y: dog.y, width: dog.getBounds().width * dog.scale, height: dog.getBounds().height * dog.scale, scale: dog.scale };
 
     border = new createjs.Sprite(spriteSheet, "border");
     border.scale = main.scale;
     border.x = main.x;
     border.y = main.y;
 
-
-
     var text1 = new createjs.Text('Drag and Drop', "30px Impact", "#ffffff");
-
-    text1.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight()
-    text1.scaleX = text1.scale * 1.1
-    text1.x = (stage.canvas.width - text1.getMeasuredWidth() * text1.scale) / 2
-    text1.y = dog.y + (dog.getBounds().height * dog.scale / 2.3 - text1.getMeasuredHeight() * text1.scale / 2)
-
+    text1.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight();
+    text1.scaleX = text1.scale * 1.1;
+    text1.x = (stage.canvas.width - text1.getMeasuredWidth() * text1.scale) / 2;
+    text1.y = dog.y + (dog.getBounds().height * dog.scale / 2.3 - text1.getMeasuredHeight() * text1.scale / 2);
 
     text_block = new createjs.Text('Blocks', "30px Impact", "#ffffff");
-
-    text_block.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight()
-    text_block.scaleX = text1.scale * 1.1
-    text_block.x = (stage.canvas.width - text_block.getMeasuredWidth() * text_block.scale) / 2
-    text_block.y = text1.y + text_block.getMeasuredHeight() * text_block.scale * 1.2
-    text_new.addChild(text1, text_block)
+    text_block.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight();
+    text_block.scaleX = text1.scale * 1.1;
+    text_block.x = (stage.canvas.width - text_block.getMeasuredWidth() * text_block.scale) / 2;
+    text_block.y = text1.y + text_block.getMeasuredHeight() * text_block.scale * 1.2;
+    text_new.addChild(text1, text_block);
 
     stage.addChild(dog, border);
-    temp()
-    renderBlock()
-    addEvent()
+    temp();
+    renderBlock();
+    addEvent();
 
 }
 function temp() {
     var orange_block = new createjs.Sprite(spriteSheet, "orange_block");
-    orange_block.scale = main.scale
-    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale
-    orange_block.y = main.y
-    listBlock.push({ x: orange_block.x, y: orange_block.y })
+    orange_block.scale = main.scale;
+    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale;
+    orange_block.y = main.y;
+    listBlock.push({ x: orange_block.x, y: orange_block.y });
     var red_block = new createjs.Sprite(spriteSheet, "red_block");
-    red_block.scale = main.scale
-    red_block.x = orange_block.x + orange_block.getBounds().width * orange_block.scale - 2.98 / 4 * orange_block.getBounds().width * orange_block.scale - red_block.getBounds().width * red_block.scale
-    red_block.y = orange_block.y + orange_block.getBounds().height * orange_block.scale
-    listBlock.push({ x: red_block.x, y: red_block.y })
+    red_block.scale = main.scale;
+    red_block.x = orange_block.x + orange_block.getBounds().width * orange_block.scale - 2.98 / 4 * orange_block.getBounds().width * orange_block.scale - red_block.getBounds().width * red_block.scale;
+    red_block.y = orange_block.y + orange_block.getBounds().height * orange_block.scale;
+    listBlock.push({ x: red_block.x, y: red_block.y });
     var purple_block = new createjs.Sprite(spriteSheet, "purple_block");
-    purple_block.scale = main.scale
-    purple_block.x = orange_block.x - purple_block.getBounds().width * purple_block.scale
-    purple_block.y = orange_block.y + 0.95 / 3 * orange_block.getBounds().height * orange_block.scale
-    listBlock.push({ x: purple_block.x, y: purple_block.y })
+    purple_block.scale = main.scale;
+    purple_block.x = orange_block.x - purple_block.getBounds().width * purple_block.scale;
+    purple_block.y = orange_block.y + 0.95 / 3 * orange_block.getBounds().height * orange_block.scale;
+    listBlock.push({ x: purple_block.x, y: purple_block.y });
     var blue_block = new createjs.Sprite(spriteSheet, "blue_block");
-    blue_block.scale = main.scale
-    blue_block.x = main.x
-    blue_block.y = main.y + main.height - blue_block.getBounds().height * blue_block.scale
-    listBlock.push({ x: blue_block.x, y: blue_block.y })
+    blue_block.scale = main.scale;
+    blue_block.x = main.x;
+    blue_block.y = main.y + main.height - blue_block.getBounds().height * blue_block.scale;
+    listBlock.push({ x: blue_block.x, y: blue_block.y });
     var yellow_block = new createjs.Sprite(spriteSheet, "yellow_block");
-    yellow_block.scale = main.scale
-    yellow_block.x = blue_block.x + 0.93 * blue_block.getBounds().width * blue_block.scale
-    yellow_block.y = blue_block.y - 0.02 * blue_block.getBounds().height * blue_block.scale
-    listBlock.push({ x: yellow_block.x, y: yellow_block.y })
+    yellow_block.scale = main.scale;
+    yellow_block.x = blue_block.x + 0.93 * blue_block.getBounds().width * blue_block.scale;
+    yellow_block.y = blue_block.y - 0.02 * blue_block.getBounds().height * blue_block.scale;
+    listBlock.push({ x: yellow_block.x, y: yellow_block.y });
 }
 
 function renderProcess() {
@@ -190,82 +185,83 @@ function renderProcess() {
     process.star.graphics.lf(["#ecbf6f", "#f8e953"], [0.7, 0.1], process.x, process.y + process.rStar / 2, process.x + process.rStar / 2, process.y + process.rStar / 3).drawPolyStar(process.x + process.rStar / 3, process.y + process.rStar / 2, process.rStar, 5, 0.6, 45);
 
     process.text_IQ = new createjs.Text('IQ', "bold 22px Impact", "#ffffff");
-    process.text_IQ.x = process.x - process.rStar / 3
+    process.text_IQ.x = process.x - process.rStar / 3;
     process.text_IQ.scaleX = (stage.canvas.width / 22) / process.text_IQ.getMeasuredWidth();
     process.text_IQ.scaleY = process.text_IQ.scaleX * 0.8;
-    process.text_IQ.y = process.y - process.height / 1.5
+    process.text_IQ.y = process.y - process.height / 1.5;
     process.text_IQ.textBaseline = "alphabetic";
 
     process.text_scores = new createjs.Text(process.score + 81, "bold 22px Impact", "#ffffff");
-    process.text_scores.x = process.x
+    process.text_scores.x = process.x;
     process.text_scores.scaleX = (stage.canvas.width / 15) / process.text_scores.getMeasuredWidth();
     process.text_scores.scaleY = process.text_scores.scaleX * 0.8;
-    process.text_scores.y = process.y + process.height * 2.7
+    process.text_scores.y = process.y + process.height * 2.7;
     process.text_scores.textBaseline = "alphabetic";
 
     stage.addChild(process.star, process.text_IQ, process.text_scores);
 }
 function updateProcess() {
-    processCr.removeChild(process.reality)
-    process.realityWidth = (process.score / totalScore) * process.width
+    processCr.removeChild(process.reality);
+    process.realityWidth = (process.score / totalScore) * process.width;
     process.reality = new createjs.Shape();
     process.reality.graphics.s("#946885");
     process.reality.graphics.ss(3);
-    process.reality.graphics.lf(["#47d4dd", "#4c43f1"], [0.7, 0.3], 0, process.height / 2, process.realityWidth, process.height / 2)
+    if(process.score <= 8) process.reality.graphics.lf(["#FFA07A", "#FF0000"], [0.7, 0.3], 0, process.height / 2, process.realityWidth, process.height / 2);
+    else process.reality.graphics.lf(["#47d4dd", "#4c43f1"], [0.7, 0.3], 0, process.height / 2, process.realityWidth, process.height / 2);
     process.reality.graphics.rc(0, 0, process.realityWidth, process.height, process.radius, process.radius, process.radius, process.radius);
-    process.reality.x = process.x
-    process.reality.y = process.y
-    process.star.x = process.realityWidth - process.rStar / 1.7
+    process.reality.x = process.x;
+    process.reality.y = process.y;
+    process.star.x = process.realityWidth - process.rStar / 1.7;
     processCr.addChild(process.reality);
-    process.text_IQ.x = process.realityWidth + process.x - process.rStar
-    process.text_scores.x = process.x + process.realityWidth - process.rStar * (0.8 + (process.score / totalScore))
-    process.text_scores.text = process.score + 81
+    process.text_IQ.x = process.realityWidth + process.x - process.rStar;
+    process.text_scores.x = process.x + process.realityWidth - process.rStar * (0.8 + (process.score / totalScore));
+    process.text_scores.text = process.score + 81;
 }
 function updateIQ() {
     var upProcess = setInterval(function () {
-        process.score += 1
-        if (process.score <= score) updateProcess()
+        process.score += 1;
+        if (process.score <= score) updateProcess();
         else clearInterval(upProcess);
     }, 30);
 }
 function updateIQD() {
     var upProcess = setInterval(function () {
-        process.score -= 1
-        if (process.score >= score) updateProcess()
+        process.score -= 1;
+        if (process.score >= score) updateProcess();
         else clearInterval(upProcess);
     }, 30);
 }
 function renderBlock() {
-    var minY = main.y + main.height
-    var maxX = main.x + main.width
+    var minY = main.y + main.height;
+    var maxX = main.x + main.width;
 
     var yellow_block = new createjs.Sprite(spriteSheet, "yellow_block");
-    yellow_block.scale = main.scale
-    yellow_block.x = main.x + yellow_block.getBounds().width * yellow_block.scale / 10
-    yellow_block.y = minY + yellow_block.getBounds().height * yellow_block.scale / 1.5
+    yellow_block.scale = main.scale;
+    yellow_block.x = main.x + yellow_block.getBounds().width * yellow_block.scale / 10;
+    yellow_block.y = minY + yellow_block.getBounds().height * yellow_block.scale / 1.5;
 
     var purple_block = new createjs.Sprite(spriteSheet, "purple_block");
-    purple_block.scale = main.scale
-    purple_block.x = yellow_block.x + yellow_block.getBounds().width * yellow_block.scale - purple_block.getBounds().width * purple_block.scale
-    purple_block.y = yellow_block.y + 1.7 * yellow_block.getBounds().height * yellow_block.scale
+    purple_block.scale = main.scale;
+    purple_block.x = yellow_block.x + yellow_block.getBounds().width * yellow_block.scale - purple_block.getBounds().width * purple_block.scale;
+    purple_block.y = yellow_block.y + 1.7 * yellow_block.getBounds().height * yellow_block.scale;
 
 
     var blue_block = new createjs.Sprite(spriteSheet, "blue_block");
-    blue_block.scale = main.scale
-    blue_block.x = yellow_block.x + 0.8 * yellow_block.getBounds().width * yellow_block.scale
-    blue_block.y = yellow_block.y + 0.7 * yellow_block.getBounds().height * yellow_block.scale
+    blue_block.scale = main.scale;
+    blue_block.x = yellow_block.x + 0.8 * yellow_block.getBounds().width * yellow_block.scale;
+    blue_block.y = yellow_block.y + 0.7 * yellow_block.getBounds().height * yellow_block.scale;
 
 
     var red_block = new createjs.Sprite(spriteSheet, "red_block");
-    red_block.scale = main.scale
-    red_block.x = maxX - red_block.getBounds().width * red_block.scale
-    red_block.y = minY + red_block.getBounds().height * red_block.scale / 2
+    red_block.scale = main.scale;
+    red_block.x = maxX - red_block.getBounds().width * red_block.scale;
+    red_block.y = minY + red_block.getBounds().height * red_block.scale / 2;
 
 
     var orange_block = new createjs.Sprite(spriteSheet, "orange_block");
-    orange_block.scale = main.scale
-    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale
-    orange_block.y = red_block.y + 1.1 * red_block.getBounds().height * red_block.scale
+    orange_block.scale = main.scale;
+    orange_block.x = main.x + main.width - orange_block.getBounds().width * orange_block.scale;
+    orange_block.y = red_block.y + 1.1 * red_block.getBounds().height * red_block.scale;
 
 
 
@@ -273,26 +269,22 @@ function renderBlock() {
     { x: red_block.x, y: red_block.y, block: red_block },
     { x: purple_block.x, y: purple_block.y, block: purple_block },
     { x: blue_block.x, y: blue_block.y, block: blue_block },
-    { x: yellow_block.x, y: yellow_block.y, block: yellow_block }]
+    { x: yellow_block.x, y: yellow_block.y, block: yellow_block }];
     for (let i = 0; i < listBlockUse.length; i++) {
         const blocks = listBlockUse[i];
         blocks.block.addEventListener("mousedown", () => { onMouseDown({ target: blocks, index: i }) });
     }
-
-
     hand = new createjs.Sprite(spriteSheet, "hand");
-    hand.scale = main.scale / 1.3
-    hand.x = red_block.x + red_block.getBounds().width * red_block.scale / 3
-    hand.y = red_block.y + red_block.getBounds().height * red_block.scale / 2.2
-
-
+    hand.scale = main.scale / 1.3;
+    hand.x = red_block.x + red_block.getBounds().width * red_block.scale / 3;
+    hand.y = red_block.y + red_block.getBounds().height * red_block.scale / 2.2;
 
     hint = new createjs.Sprite(spriteSheet, "hint_red_block");
-    hint.scale = main.scale
-    hint.x = listBlock[1].x
-    hint.y = listBlock[1].y
+    hint.scale = main.scale;
+    hint.x = listBlock[1].x;
+    hint.y = listBlock[1].y;
 
-    stage.addChild(hint, text_new, orange_block, red_block, purple_block, blue_block, yellow_block, hand)
+    stage.addChild(hint, text_new, orange_block, red_block, purple_block, blue_block, yellow_block, hand);
     createjs.Tween.get(hand, { loop: true })
         .to({
             x: listBlock[1].x + red_block.getBounds().width * red_block.scale / 6,
@@ -303,26 +295,22 @@ function renderBlock() {
             x: red_block.x + red_block.getBounds().width * red_block.scale / 3,
             y: red_block.y + red_block.getBounds().height * red_block.scale / 2.2
         }, 700, createjs.Ease.linear)
-        .wait(100)
+        .wait(100);
     createjs.Tween.get(hint, { loop: true })
-        .to({
-            alpha: 0.1
-        }, 700, createjs.Ease.linear)
-        .to({
-            alpha: 1
-        }, 500, createjs.Ease.linear)
+        .to({ alpha: 0.1 }, 700, createjs.Ease.linear)
+        .to({ alpha: 1 }, 500, createjs.Ease.linear);
 }
 
 function removeHand() {
     createjs.Tween.removeTweens(hand);
-    stage.removeChild(hand)
+    stage.removeChild(hand);
     createjs.Tween.removeTweens(hint);
-    stage.removeChild(hint)
+    stage.removeChild(hint);
 }
 function removeEvent() {
     for (let i = 0; i < listBlockUse.length; i++) {
         const block = listBlockUse[i].block;
-        block._listeners = {}
+        block._listeners = {};
         block.removeEventListener("mousedown", () => { onMouseDown() });
     }
 }
@@ -359,18 +347,18 @@ function detectMobile() {
     return false;
 }
 function onMouseDown(block) {
-    text_new.removeAllChildren()
-    stage.removeChild(text_new)
+    text_new.removeAllChildren();
+    stage.removeChild(text_new);
     pressMove = true;
-    blockUse = block
+    blockUse = block;
 }
 function onPressMove(evt) {
     if (pressMove) {
-        pressUp = true
-        var target = blockUse.target.block
+        pressUp = true;
+        var target = blockUse.target.block;
         var location = currentMouse(evt);
-        target.x = location.x - target.getBounds().width / 2
-        target.y = location.y - target.getBounds().height / 2
+        target.x = location.x - target.getBounds().width / 2;
+        target.y = location.y - target.getBounds().height / 2;
     }
 }
 function onMouseUp(evt) {
@@ -378,33 +366,32 @@ function onMouseUp(evt) {
     if (pressUp) {
         var location = currentMouse(evt);
 
-        var target = blockUse.target.block
-        index = listBlock[blockUse.index]
+        var target = blockUse.target.block;
+        index = listBlock[blockUse.index];
         if (target.x >= index.x - target.getBounds().width / 3 && target.x <= index.x + target.getBounds().width / 3) {
             if (target.y >= index.y - target.getBounds().height / 3 && target.y <= index.y + target.getBounds().height / 3) {
                 removeHand()
-                target.x = index.x
-                target.y = index.y
-                win += 1
-                if (score < totalScore) score += 4
-                updateIQ()
-                setStar()
+                target.x = index.x;
+                target.y = index.y;
+                win += 1;
+                if (score < totalScore) score += 4;
+                updateIQ();
+                setStar();
             } else {
-                target.x = listBlockUse[blockUse.index].x
-                target.y = listBlockUse[blockUse.index].y
-                score -= 4
-                updateIQD()
-                gameClose()
+                target.x = listBlockUse[blockUse.index].x;
+                target.y = listBlockUse[blockUse.index].y;
+                score -= 4;
+                updateIQD();
+                gameClose();
             }
         } else {
-            target.x = listBlockUse[blockUse.index].x
-            target.y = listBlockUse[blockUse.index].y
-            score -= 4
-            updateIQD()
-            gameClose()
+            target.x = listBlockUse[blockUse.index].x;
+            target.y = listBlockUse[blockUse.index].y;
+            score -= 4;
+            updateIQD();
+            gameClose();
         }
-        pressUp = false
-
+        pressUp = false;
     }
 }
 function tick(event) {
@@ -426,38 +413,38 @@ function gameClose() {
 
         var shape = new createjs.Shape();
         shape.graphics.f("#fafafa").dr(0, 0, stage.canvas.width, stage.canvas.height);
-        shape.alpha = 0.4
+        shape.alpha = 0.4;
 
 
         var bgcore = new createjs.Shape();
 
         bgcore.graphics.s("#18236b");
         bgcore.graphics.ss(3);
-        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5)
+        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5);
         bgcore.graphics.rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
-        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
-        bgcore.y = stage.canvas.height / 4
+        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2;
+        bgcore.y = stage.canvas.height / 4;
 
 
         var fail = new createjs.Text('FAILED ', "Italic 30px Impact", "#ffffff");
 
-        fail.scale = (stage.canvas.width / 3) / fail.getMeasuredWidth()
-        fail.x = (stage.canvas.width - fail.getMeasuredWidth() * fail.scale) / 2
-        fail.y = bgcore.y + (stage.canvas.height / 5) / 3 - fail.getMeasuredHeight() * fail.scale / 2
+        fail.scale = (stage.canvas.width / 3) / fail.getMeasuredWidth();
+        fail.x = (stage.canvas.width - fail.getMeasuredWidth() * fail.scale) / 2;
+        fail.y = bgcore.y + (stage.canvas.height / 5) / 3 - fail.getMeasuredHeight() * fail.scale / 2;
 
         var full = new createjs.Sprite(spriteSheet, "full");
-        full.scale = (stage.canvas.width / 7) / full.getBounds().width
-        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2
-        full.y = fail.y + fail.getMeasuredHeight() * fail.scale + full.getBounds().height * full.scale / 3
+        full.scale = (stage.canvas.width / 7) / full.getBounds().width;
+        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2;
+        full.y = fail.y + fail.getMeasuredHeight() * fail.scale + full.getBounds().height * full.scale / 3;
 
         var containerfail = new createjs.Container();
-        containerfail.y = - bgcore.y - stage.canvas.height / 4
-        containerfail.addChild(bgcore, fail, full)
+        containerfail.y = - bgcore.y - stage.canvas.height / 4;
+        containerfail.addChild(bgcore, fail, full);
 
         var play_again = new createjs.Sprite(spriteSheet, "btn_again");
-        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
-        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
-        play_again.y = stage.canvas.height
+        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width;
+        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2;
+        play_again.y = stage.canvas.height;
 
         var play_againx = play_again.x,
             play_againy = bgcore.y + stage.canvas.height / 5 + play_again.getBounds().height * play_again.scale * 2.5,
@@ -478,17 +465,17 @@ function gameClose() {
                         createjs.Ease.linear
                     )
                     .to({ scale: play_againscale, x: play_againx, y: play_againy }, 500, createjs.Ease.linear);
-            })
+            });
         play_again.addEventListener("click", () => { getLinkInstall() }, false);
 
-        stage.addChild(shape, containerfail, play_again)
+        stage.addChild(shape, containerfail, play_again);
         createjs.Tween.get(containerfail)
-            .to({ y: 0 }, 500, createjs.Ease.linear)
+            .to({ y: 0 }, 500, createjs.Ease.linear);
     }
 }
 function setStar() {
     if (win == 5) {
-        removeEvent()
+        removeEvent();
         setInterval(emitParticles, Math.random() * 700 + 300);
         setInterval(emitParticles, Math.random() * 700 + 300);
 
@@ -496,27 +483,27 @@ function setStar() {
 
         bgcore.graphics.s("#18236b");
         bgcore.graphics.ss(3);
-        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5)
+        bgcore.graphics.lf(["#1e134c", "#35125b"], [0.7, 0.3], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5);
         bgcore.graphics.rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
-        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
-        bgcore.y = stage.canvas.height / 4
+        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2;
+        bgcore.y = stage.canvas.height / 4;
 
         var best = new createjs.Text('Your IQ ', "22px Impact", "#ffffff");
 
-        best.scale = (stage.canvas.width / 6) / best.getMeasuredWidth()
-        best.x = (stage.canvas.width - best.getMeasuredWidth() * best.scale) / 2
-        best.y = bgcore.y + best.getMeasuredHeight() * best.scale * 1.4
+        best.scale = (stage.canvas.width / 6) / best.getMeasuredWidth();
+        best.x = (stage.canvas.width - best.getMeasuredWidth() * best.scale) / 2;
+        best.y = bgcore.y + best.getMeasuredHeight() * best.scale * 1.4;
 
         var text = new createjs.Text(score + 81, "22px Impact", "#ffffff");
-        text.scale = (stage.canvas.width / 7) / text.getMeasuredWidth()
-        text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
-        text.y = bgcore.y + stage.canvas.height / 5 - text.getMeasuredHeight() * text.scale * 1.6
+        text.scale = (stage.canvas.width / 7) / text.getMeasuredWidth();
+        text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2;
+        text.y = bgcore.y + stage.canvas.height / 5 - text.getMeasuredHeight() * text.scale * 1.6;
 
 
         var play_again = new createjs.Sprite(spriteSheet, "btn_again");
-        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
-        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
-        play_again.y = text.y + text.getMeasuredHeight() * text.scale + play_again.getBounds().height * play_again.scale * 2.5
+        play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width;
+        play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2;
+        play_again.y = text.y + text.getMeasuredHeight() * text.scale + play_again.getBounds().height * play_again.scale * 2.5;
 
         var play_againx = play_again.x,
             play_againy = play_again.y,
@@ -533,14 +520,14 @@ function setStar() {
             )
             .to({ scale: play_againscale, x: play_againx, y: play_againy }, 500, createjs.Ease.linear);
         play_again.addEventListener("click", () => { getLinkInstall() }, false);
-        removeBlock()
-        stage.removeChild(dog, border)
+        removeBlock();
+        stage.removeChild(dog, border);
         var full = new createjs.Sprite(spriteSheet, "full");
-        full.scale = (stage.canvas.width * 2.2 / 3) / full.getBounds().width
-        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2
+        full.scale = (stage.canvas.width * 2.2 / 3) / full.getBounds().width;
+        full.x = (stage.canvas.width - full.getBounds().width * full.scale) / 2;
         full.y = stage.canvas.height / 4.5;
 
-        stage.addChild(full, bgcore, best, text, play_again)
+        stage.addChild(full, bgcore, best, text, play_again);
 
         createjs.Tween.get(full)
             .to(
@@ -551,13 +538,13 @@ function setStar() {
                 },
                 500,
                 createjs.Ease.linear
-            )
+            );
 
     }
 }
 function removeBlock() {
     listBlockUse.forEach(blocks => {
-        stage.removeChild(blocks.block)
+        stage.removeChild(blocks.block);
     });
 }
 

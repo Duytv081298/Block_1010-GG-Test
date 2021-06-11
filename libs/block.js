@@ -316,6 +316,8 @@ function renderBlock() {
 function removeHand() {
     createjs.Tween.removeTweens(hand);
     stage.removeChild(hand)
+    createjs.Tween.removeTweens(hint);
+    stage.removeChild(hint)
 }
 function removeEvent() {
     for (let i = 0; i < listBlockUse.length; i++) {

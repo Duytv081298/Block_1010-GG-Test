@@ -9,16 +9,17 @@
     [1, 1, 400, 711, 0, 0, 0],
     [1, 714, 200, 53, 0, 0, 0],
     [1, 769, 200, 53, 0, 0, 0],
-    [203, 714, 200, 53, 0, 0, 0],
-    [203, 769, 82, 105, 0, 0, 0],
-    [287, 769, 82, 82, 0, -6, -2],
-    [371, 769, 62, 79, 0, -1, 0],
+    [1, 824, 200, 53, 0, 0, 0],
+    [203, 714, 88, 115, 0, 0, 0],
+    [293, 714, 82, 105, 0, 0, 0],
+    [377, 714, 82, 82, 0, -6, -2],
+    [377, 798, 62, 79, 0, -1, 0],
     [403, 1, 300, 223, 0, 0, 0],
     [403, 226, 300, 223, 0, 0, 0],
     [403, 451, 300, 223, 0, 0, 0],
-    [435, 676, 113, 164, 0, 0, 0],
-    [550, 676, 88, 115, 0, 0, 0],
-    [640, 676, 60, 108, 0, 0, 0]
+    [461, 676, 113, 164, 0, 0, 0],
+    [576, 676, 60, 108, 0, 0, 0],
+    [638, 676, 60, 108, 0, 0, 0]
 ],
 
 "animations": {
@@ -26,19 +27,20 @@
     "btn_again": { "frames": [1] },
     "install_now": { "frames": [2] },
     "play_now": { "frames": [3] },
-    "hand": { "frames": [4] },
-    "yellow_block": { "frames": [5] },
-    "purple_block": { "frames": [6] },
-    "bg": { "frames": [7] },
-    "border": { "frames": [8] },
-    "full": { "frames": [9] },
-    "blue_block": { "frames": [10] },
-    "orange_block": { "frames": [11] },
-    "red_block": { "frames": [12] }
+    "orange_block": { "frames": [4] },
+    "hand": { "frames": [5] },
+    "yellow_block": { "frames": [6] },
+    "purple_block": { "frames": [7] },
+    "bg": { "frames": [8] },
+    "border": { "frames": [9] },
+    "full": { "frames": [10] },
+    "blue_block": { "frames": [11] },
+    "hint_red_block": { "frames": [12] },
+    "red_block": { "frames": [13] }
 },
 
 "texturepacker": [
-        "SmartUpdateHash: $TexturePacker:SmartUpdate:68846435d248f20a2b7c1540f2f53853:0e92944c608c7ede407c5529cc8183d0:9589d0df6b1e3b8906c973296c7bce1e$",
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:e5b0b23d6028152d66006134d926db3d:1871f723660f16fe2216f796da0b5e56:9589d0df6b1e3b8906c973296c7bce1e$",
         "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
 ]
 

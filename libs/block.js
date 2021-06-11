@@ -10,8 +10,8 @@ var height = window.innerHeight
 width = isMobile ? width : height / 1.7;
 var canvas, stage, update = true;
 var supportsPassive = false, pressMove = false, pressUp = false;
-var containerMain = new createjs.Container();
 var processCr = new createjs.Container();
+var text_new = new createjs.Container();
 var process = {
     x: 0,
     y: 0,
@@ -26,7 +26,7 @@ var process = {
     text_scores: {},
     text_IQ: {}
 };
-var main = {}, dog, border, hand;
+var main = {}, dog, border, hand, hint;
 var listBlock = [], listBlockUse = [], blockUse;
 var win = 0;
 
@@ -57,16 +57,17 @@ function setAnimation() {
             [1, 1, 400, 711, 0, 0, 0],
             [1, 714, 200, 53, 0, 0, 0],
             [1, 769, 200, 53, 0, 0, 0],
-            [203, 714, 200, 53, 0, 0, 0],
-            [203, 769, 82, 105, 0, 0, 0],
-            [287, 769, 82, 82, 0, -6, -2],
-            [371, 769, 62, 79, 0, -1, 0],
+            [1, 824, 200, 53, 0, 0, 0],
+            [203, 714, 88, 115, 0, 0, 0],
+            [293, 714, 82, 105, 0, 0, 0],
+            [377, 714, 82, 82, 0, -6, -2],
+            [377, 798, 62, 79, 0, -1, 0],
             [403, 1, 300, 223, 0, 0, 0],
             [403, 226, 300, 223, 0, 0, 0],
             [403, 451, 300, 223, 0, 0, 0],
-            [435, 676, 113, 164, 0, 0, 0],
-            [550, 676, 88, 115, 0, 0, 0],
-            [640, 676, 60, 108, 0, 0, 0]
+            [461, 676, 113, 164, 0, 0, 0],
+            [576, 676, 60, 108, 0, 0, 0],
+            [638, 676, 60, 108, 0, 0, 0]
         ],
 
         "animations": {
@@ -74,19 +75,19 @@ function setAnimation() {
             "btn_again": { "frames": [1] },
             "install_now": { "frames": [2] },
             "play_now": { "frames": [3] },
-            "hand": { "frames": [4] },
-            "yellow_block": { "frames": [5] },
-            "purple_block": { "frames": [6] },
-            "bg": { "frames": [7] },
-            "border": { "frames": [8] },
-            "full": { "frames": [9] },
-            "blue_block": { "frames": [10] },
-            "orange_block": { "frames": [11] },
-            "red_block": { "frames": [12] }
+            "orange_block": { "frames": [4] },
+            "hand": { "frames": [5] },
+            "yellow_block": { "frames": [6] },
+            "purple_block": { "frames": [7] },
+            "bg": { "frames": [8] },
+            "border": { "frames": [9] },
+            "full": { "frames": [10] },
+            "blue_block": { "frames": [11] },
+            "hint_red_block": { "frames": [12] },
+            "red_block": { "frames": [13] }
         },
     });
     setBackground();
-    stage.addChild(containerMain);
 }
 function setStage() {
     canvas = document.getElementById("myCanvas");
@@ -121,6 +122,24 @@ function setBackground() {
     border.scale = main.scale;
     border.x = main.x;
     border.y = main.y;
+
+
+
+    var text1 = new createjs.Text('Drag and Drop', "30px Impact", "#ffffff");
+
+    text1.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight()
+    text1.scaleX = text1.scale * 1.1
+    text1.x = (stage.canvas.width - text1.getMeasuredWidth() * text1.scale) / 2
+    text1.y = dog.y + (dog.getBounds().height * dog.scale / 2.3 - text1.getMeasuredHeight() * text1.scale / 2)
+
+
+    text_block = new createjs.Text('Blocks', "30px Impact", "#ffffff");
+
+    text_block.scale = (stage.canvas.height / 27) / text1.getMeasuredHeight()
+    text_block.scaleX = text1.scale * 1.1
+    text_block.x = (stage.canvas.width - text_block.getMeasuredWidth() * text_block.scale) / 2
+    text_block.y = text1.y + text_block.getMeasuredHeight() * text_block.scale * 1.2
+    text_new.addChild(text1, text_block)
 
     stage.addChild(dog, border);
     temp()
@@ -249,7 +268,6 @@ function renderBlock() {
     orange_block.y = red_block.y + 1.1 * red_block.getBounds().height * red_block.scale
 
 
-    stage.addChild(orange_block, red_block, purple_block, blue_block, yellow_block)
 
     listBlockUse = [{ x: orange_block.x, y: orange_block.y, block: orange_block },
     { x: red_block.x, y: red_block.y, block: red_block },
@@ -266,8 +284,15 @@ function renderBlock() {
     hand.scale = main.scale / 1.3
     hand.x = red_block.x + red_block.getBounds().width * red_block.scale / 3
     hand.y = red_block.y + red_block.getBounds().height * red_block.scale / 2.2
-    // hand.y = stage.canvas.height
-    stage.addChild(hand)
+
+
+
+    hint = new createjs.Sprite(spriteSheet, "hint_red_block");
+    hint.scale = main.scale
+    hint.x = listBlock[1].x
+    hint.y = listBlock[1].y
+
+    stage.addChild(hint, text_new, orange_block, red_block, purple_block, blue_block, yellow_block, hand)
     createjs.Tween.get(hand, { loop: true })
         .to({
             x: listBlock[1].x + red_block.getBounds().width * red_block.scale / 6,
@@ -279,6 +304,13 @@ function renderBlock() {
             y: red_block.y + red_block.getBounds().height * red_block.scale / 2.2
         }, 700, createjs.Ease.linear)
         .wait(100)
+    createjs.Tween.get(hint, { loop: true })
+        .to({
+            alpha: 0.1
+        }, 300, createjs.Ease.linear)
+        .to({
+            alpha: 1
+        }, 300, createjs.Ease.linear)
 }
 
 function removeHand() {
@@ -325,6 +357,8 @@ function detectMobile() {
     return false;
 }
 function onMouseDown(block) {
+    text_new.removeAllChildren()
+    stage.removeChild(text_new)
     pressMove = true;
     blockUse = block
 }

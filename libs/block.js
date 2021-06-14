@@ -9,22 +9,19 @@ var height = window.innerHeight
     || document.body.clientHeight;
 width = isMobile ? width : height / 1.7;
 var canvas, stage, update = true;
-var supportsPassive = false, pressMove = false;
+var supportsPassive = false, pressMove = false, pressUp = false;
 var game = {
     block: { width: 0 },
     map: [],
-    scores: 0,
 };
 var scale = 1;
 var spriteSheet;
-var levelCurr = 0;
 var blockUse = [], storageBlock;
 var containerMain = new createjs.Container(), containerNew = [];
 var defaultX = 0, defaultY = 0;
-var indexGroup = {}, groupCurr = 0, newScaleGroup, numGroup;
+var groupCurr = 0;
 var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distanceGTH = 0, hintFree = [];
 var hand_tut, text_scores, scores = 0, install_now;
-var freeUser = false, stepFree = 1;
 const blockFree = [
     [[1], [1], [1], [1], [1]],
     [[0, 1], [1, 1], [0, 1]],
@@ -36,6 +33,7 @@ const blockFree = [
     [[1, 1]],
     [[1], [1], [1], [1]],
     [[1, 1], [1]],
+    [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
     [[1, 0], [1, 1], [1, 0]],
     [[1, 1, 1, 1, 1]],
     [[1, 1, 1, 1]],
@@ -43,6 +41,7 @@ const blockFree = [
     [[1], [1]],
     [[1, 1], [0, 1], [0, 1]],
     [[1, 1, 1]],
+    [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 ];
 
 const blockFreeHard = [
@@ -53,152 +52,18 @@ const blockFreeHard = [
     [[1, 1], [0, 1], [0, 1]],
     [[1, 1, 1, 1, 1]],
 ];
-const level1 = {
-    "map":
-        [
-            [
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 3, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 4, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 6, 6, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1],
-                [-1, -1, -1, -1, 7, 7, -1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, -1, 1, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 4, 4, -1, -1, -1, -1, -1],
-                [2, 2, 2, -1, -1, 6, 6, 3, 3, 7],
-                [5, 5, 5, -1, -1, 6, 6, 6, 3, 7],
-                [-1, -1, -1, 7, 7, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 7, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 0, -1, -1, -1, -1, -1],
-                [-1, -1, -1, 0, 0, -1, -1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, 5, 5, 1, 1, 7, 3, 3, 3],
-                [-1, -1, 5, 5, 1, 4, 7, 3, 3, 3],
-                [-1, -1, -1, -1, -1, 4, 4, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 4, 4, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, 2, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, 2, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 0, 0, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, 6, -1, -1, -1],
-                [-1, -1, -1, -1, -1, 6, 1, -1, -1, -1]
-            ],
-            [
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-                [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-            ],
-        ],
-    "step":
-        [
-            [
-                {
-                    "hint": [{ x: 4, y: 4 }, { x: 4, y: 5 }, { x: 5, y: 5 }, { x: 4, y: 6 }],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1], [1, 1]],
-                    "color": 7,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[0, 1], [1, 1]],
-                    "color": 6,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1, 1]],
-                    "color": 5,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1]],
-                    "color": 3,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1], [1, 1], [1]],
-                    "color": 3,
-                    "use": false
-                }
-            ],
-            [
-                {
-                    "hint": [{ x: 3, y: 4 }, { x: 4, y: 4 }, { x: 3, y: 5 }, { x: 4, y: 5 }],
-                    "block": [[1, 1], [1, 1],],
-                    "color": 0,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1, 1]],
-                    "color": 5,
-                    "use": false
-                },
-                {
-                    "hint": [],
-                    "block": [[1], [1, 1], [1]],
-                    "color": 3,
-                    "use": false
-                }
-            ],
-            [
-                {
-                    "hint": [{ x: 5, y: 4 }, { x: 6, y: 4 }, { x: 5, y: 5 }, { x: 5, y: 6 }],
-                    "block": [[1, 1], [1], [1]],
-                    "color": 0,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 1], [1, 1]],
-                    "color": 7,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[0, 1], [1, 1]],
-                    "color": 6,
-                    "use": true
-                },
-                {
-                    "hint": [],
-                    "block": [[1, 0], [1, 1], [1, 0]],
-                    "color": 6,
-                    "use": true
-                }
-            ]
-        ]
-}
+const map = [
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+];
 //game initialization
 async function gameinit() {
     createjs.RotationPlugin.install();
@@ -224,46 +89,53 @@ function setAnimation() {
             [1, 1, 1028, 282, 0, -19, -24],
             [1031, 1, 985, 984, 0, -22, -13],
             [1, 285, 367, 137, 0, 0, -13],
-            [370, 285, 93, 102, 0, 0, 0],
-            [370, 389, 93, 93, 0, 0, 0],
-            [1, 424, 93, 93, 0, 0, 0],
-            [96, 424, 93, 93, 0, 0, 0],
-            [191, 424, 93, 93, 0, 0, 0],
-            [286, 484, 200, 53, 0, 0, 0],
-            [465, 285, 200, 53, 0, 0, 0],
-            [1, 519, 93, 93, 0, 0, 0],
-            [96, 519, 93, 93, 0, 0, 0],
-            [191, 519, 93, 93, 0, 0, 0],
-            [465, 340, 93, 93, 0, 0, 0],
-            [488, 435, 93, 93, 0, 0, 0]
+            [370, 285, 300, 533, 0, 0, 0],
+            [1, 424, 300, 300, 0, 0, 0],
+            [1, 726, 300, 99, 0, 0, 0],
+            [303, 820, 205, 67, 0, 0, 0],
+            [1, 827, 200, 53, 0, 0, 0],
+            [203, 827, 93, 102, 0, 0, 0],
+            [1, 882, 200, 53, 0, 0, 0],
+            [510, 820, 200, 53, 0, 0, 0],
+            [510, 875, 93, 93, 0, 0, 0],
+            [298, 889, 93, 93, 0, 0, 0],
+            [393, 889, 93, 93, 0, 0, 0],
+            [605, 875, 93, 93, 0, 0, 0],
+            [700, 875, 93, 93, 0, 0, 0],
+            [672, 285, 93, 93, 0, 0, 0],
+            [672, 380, 93, 93, 0, 0, 0],
+            [672, 475, 93, 93, 0, 0, 0],
+            [712, 570, 93, 93, 0, 0, 0]
         ],
 
         "animations": {
+            "img1010": { "frames": [6] },
             "bottom": { "frames": [0] },
             "grid": { "frames": [1] },
             "score": { "frames": [2] },
-            "hand_tut": { "frames": [3] },
-            "block_blue": { "frames": [4] },
-            "block_cyan": { "frames": [5] },
-            "block_green": { "frames": [6] },
-            "block_orange": { "frames": [7] },
-            "btn_again": { "frames": [8] },
-            "install_now": { "frames": [9] },
-            "block_pink": { "frames": [10] },
-            "block_purple": { "frames": [11] },
-            "block_red": { "frames": [12] },
-            "block_yellow": { "frames": [13] },
-            "square_hint": { "frames": [14] }
+            "bg": { "frames": [3] },
+            "logo": { "frames": [4] },
+            "vlock": { "frames": [5] },
+            "btn_again": { "frames": [7] },
+            "hand_tut": { "frames": [8] },
+            "contineu": { "frames": [9] },
+            "install_now": { "frames": [10] },
+            "block_blue": { "frames": [11] },
+            "block_cyan": { "frames": [12] },
+            "block_green": { "frames": [13] },
+            "block_orange": { "frames": [14] },
+            "block_pink": { "frames": [15] },
+            "block_purple": { "frames": [16] },
+            "block_red": { "frames": [17] },
+            "block_yellow": { "frames": [18] },
+            "square_hint": { "frames": [19] }
         },
     });
     setBackground();
     stage.addChild(containerMain);
-    var map = level1.map[levelCurr];
     game.map = setMap(map);
-    renderBlockHint();
-    renderGroupBlockDefault();
-    addHand()
-    addEvent();
+    createGroupBlockFree();
+    callEndTime()
 }
 function setMap(map) {
     var locationArr = [];
@@ -299,6 +171,12 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
+
+    var bg = new createjs.Sprite(spriteSheet, "bg");
+    bg.scaleX = stage.canvas.width / bg.getBounds().width;
+    bg.scaleY = stage.canvas.height / bg.getBounds().height;
+    stage.addChild(bg);
+
     var bgText = new createjs.Shape();
     bgText.graphics.f("#ffffff").dr(0, 0, stage.canvas.width, stage.canvas.height / 17);
     var textE = new createjs.Text('New Block Puzzle 2021', "22px Impact", "#000000");
@@ -366,61 +244,7 @@ function setBackground() {
         .to({ scale: install_nowscale, x: install_nowx, y: install_nowy }, 500, createjs.Ease.linear);
     install_now.addEventListener("click", () => { getLinkInstall() }, false);
 }
-
-//Group Block
-function renderGroupBlockDefault() {
-    if (!freeUser) {
-        var listStep = level1.step[levelCurr];
-        for (let i = 0; i < 3; i++) {
-            const step = listStep[i];
-            renderGroupBlock(step.block, step.color, i);
-        }
-        numGroup = 2
-    } else {
-        for (let i = 0; i < 3; i++) {
-            var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-            var color = Math.floor(Math.random() * 8)
-            renderGroupBlock(block, color, i);
-        }
-
-    }
-}
-function createGroupBlock() {
-    switch (groupCurr) {
-        case 0:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
-            var gr2w = blockUse[groupCurr + 2].width * (storageBlock.height / 6.5);
-            var gr1 = blockUse[groupCurr + 1].target;
-            var gr2 = blockUse[groupCurr + 2].target;
-            blockUse[groupCurr] = blockUse[groupCurr + 1]
-            blockUse[groupCurr].x = indexGroup.x0 + (storageBlock.height / 6.5)
-            blockUse[groupCurr + 1] = blockUse[groupCurr + 2]
-            blockUse[groupCurr + 1].x = indexGroup.x1 - gr2w / 2
-            createjs.Tween.get(gr1)
-                .to({ x: blockUse[groupCurr].x, y: blockUse[groupCurr].y }, 100)
-            createjs.Tween.get(gr2)
-                .to({ x: blockUse[groupCurr + 1].x, y: blockUse[groupCurr + 1].y }, 100)
-            break;
-        case 1:
-            var gr1w = blockUse[groupCurr + 1].width * (storageBlock.height / 6.5);
-            var gr1 = blockUse[groupCurr + 1].target;
-            blockUse[groupCurr] = blockUse[groupCurr + 1]
-            blockUse[groupCurr].x = indexGroup.x1 - gr1w / 2
-            createjs.Tween.get(gr1)
-                .to({ x: blockUse[groupCurr].x, y: blockUse[groupCurr].y }, 100)
-            break;
-    }
-    if (!freeUser) {
-        const step = level1.step[levelCurr][numGroup];
-        renderGroupBlock(step.block, step.color);
-    } else {
-        var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-        var color = Math.floor(Math.random() * 8)
-        renderGroupBlock(block, color);
-    }
-}
 function renderGroupBlock(blockArr, color, index) {
-    if (index == null) index = 2;
     var colorstr = convertBlock(color);
     var block = new createjs.Sprite(spriteSheet, colorstr);
     block.scale = (storageBlock.height / 6.5) / block.getBounds().width;
@@ -446,13 +270,8 @@ function renderGroupBlock(blockArr, color, index) {
 
     containerBlockUse.y = storageBlock.avgY - heightContainer / 2;
     containerBlockUse.x = index == 0 ? storageBlock.minX : index == 1 ? (storageBlock.maxX + storageBlock.minX - widthContainer + stage.canvas.width / 40) / 2 : storageBlock.maxX - widthContainer;
-    indexGroup = {
-        x0: storageBlock.minX,
-        x1: (storageBlock.maxX + storageBlock.minX + stage.canvas.width / 40) / 2,
-        x2: storageBlock.maxX
-    };
-    stage.addChild(containerBlockUse);
 
+    stage.addChild(containerBlockUse);
     var groupBlock = {
         target: containerBlockUse,
         x: containerBlockUse.x,
@@ -462,139 +281,40 @@ function renderGroupBlock(blockArr, color, index) {
         scale: containerBlockUse.scale,
         color: color
     };
-    // if (blockUse.length == 3) blockUse[2] = groupBlock;
-    // else 
     blockUse.push(groupBlock);
-
+    addEventFree(containerBlockUse, blockUse.length - 1)
 }
-function blockToContainer() {
-    var indexHint = getIndexHint();
-    var blockChild = blockUse[groupCurr].target.children
-    scores += blockChild.length * 10
-    text_scores.text = scores;
-    text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-
-    const color = blockUse[groupCurr].color;
-    var colorstr = convertBlock(color);
-    var blocknew = new createjs.Sprite(spriteSheet, colorstr);
-    blocknew.scale = scale;
-    for (let i = 0; i < blockChild.length; i++) {
-        var block = blockChild[i];
-        var index1 = lToIGr({ x: block.x, y: block.y });
-        var x = indexHint.minX + index1.x;
-        var y = indexHint.minY + index1.y;
-        var item = game.map[y][x];
-        var newblock = blocknew.clone();
-        newblock.x = item.x;
-        newblock.y = item.y;
-        containerMain.addChild(newblock);
-        containerNew.push({ x: x, y: y });
-        game.map[y][x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color };
-
-    }
-    blockUse[groupCurr].target.removeAllChildren()
-    stage.removeChild(blockUse[groupCurr].target)
-}
-function removeGrBlock() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const grBlock = blockUse[i];
-        stage.removeChild(grBlock.target)
-    }
-    blockUse = []
-}
-function addHand() {
-    hand_tut.x = blockUse[0].x;
-    hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5;
-    hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
-    stage.addChild(hand_tut);
-    createjs.Tween.get(hand_tut, { loop: true })
-        .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 1500)
-        .wait(300)
-        .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5 }, 1500)
-        .wait(300)
-}
+// function addHand() {
+//     hand_tut.x = blockUse[0].x;
+//     hand_tut.y = blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5;
+//     hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
+//     stage.addChild(hand_tut);
+//     createjs.Tween.get(hand_tut, { loop: true })
+//         .to({ x: indexHint.realityX, y: indexHint.realityY + ((indexHint.maxY - indexHint.minY) * game.block.width / 2) }, 1500)
+//         .wait(300)
+//         .to({ x: blockUse[0].x, y: blockUse[0].y + (blockUse[0].height * storageBlock.height / 6.5) / 2.5 }, 1500)
+//         .wait(300)
+// }
 function removeHand() {
     createjs.Tween.removeTweens(hand_tut);
     stage.removeChild(hand_tut)
 }
 
-//Hint Block
-function renderBlockHint() {
-    groupHint.removeAllChildren()
-    var hint = new createjs.Sprite(spriteSheet, "square_hint");
-    hint.scale = scale;
-    const hintArr = level1.step[levelCurr][hintCurr].hint;
-    for (let i = 0; i < hintArr.length; i++) {
-        var item = hintArr[i];
-        var blockHint = hint.clone();
-        var index = game.map[item.y][item.x];
-        blockHint.x = index.x;
-        blockHint.y = index.y;
-        groupHint.addChild(blockHint);
-    }
-    containerMain.addChild(groupHint);
-    if (level1.step[levelCurr][hintCurr].hint.length != 0) indexHint = getIndexHint();
-
-}
-function getIndexHint() {
-    var currStep = level1.step[levelCurr][hintCurr].hint;
-    var minX = currStep[0].x;
-    var maxX = currStep[0].x;
-    var minY = currStep[0].y;
-    var maxY = currStep[0].y;
-    for (let i = 0; i < currStep.length; i++) {
-        const item = currStep[i];
-        if (item.x < minX) minX = item.x;
-        if (item.x > maxX) maxX = item.x;
-        if (item.y < minY) minY = item.y;
-        if (item.y > maxY) maxY = item.y;
-    }
-    var index = game.map[minY][minX];
-    return { minX: minX, minY: minY, maxX: maxX, maxY: maxY, realityX: index.x, realityY: index.y };
-}
-
 //Event
-function addEvent() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (isMobile) {
-            target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-            canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-            target.myParam = i;
-        } else {
-            target.addEventListener("mousedown", onMouseDown);
-            canvas.addEventListener("mousemove", onPressMove);
-            canvas.addEventListener("mouseup", onMouseUp);
-            target.myParam = i;
-        }
-    }
-}
-function removeEvent(target) {
-    if (isMobile) {
-        target.removeEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-        canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
-        canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
-    } else {
-        target.removeEventListener("mousedown", onMouseDown);
-        canvas.removeEventListener("mousemove", onPressMove);
-        canvas.removeEventListener("mouseup", onMouseUp);
-    }
-}
 function removeAllEvent() {
     for (let i = 0; i < blockUse.length; i++) {
         const target = blockUse[i].target;
         if (isMobile) {
             if (target) {
                 target.removeEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
-                canvas.removeEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
+                canvas.removeEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+                canvas.removeEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
             }
         } else {
             if (target) {
                 target.removeEventListener("mousedown", onMouseDown);
-                canvas.removeEventListener("mousemove", onPressMoveFree);
-                canvas.removeEventListener("mouseup", onMouseUpFree);
+                canvas.removeEventListener("mousemove", onPressMove);
+                canvas.removeEventListener("mouseup", onMouseUp);
             }
         }
     }
@@ -624,86 +344,35 @@ function onMouseDown(evt) {
     pressMove = true;
     var location = currentMouse(evt);
     groupCurr = evt.currentTarget.myParam;
-    distanceGTH = getDistance(location, { x: indexHint.realityX, y: indexHint.realityY })
-}
-function onPressMove(evt) {
-    if (pressMove) {
-        var location = currentMouse(evt);
-        var target = blockUse[groupCurr].target;
-        target.x = location.x;
-        target.y = location.y;
-        var scaleItem = blockUse[groupCurr].target.children[0].scale;
-        var distance = getDistance(location, { x: indexHint.realityX, y: indexHint.realityY });
-        var percent = distance / distanceGTH - 1;
-        newScaleGroup = scale / scaleItem;
-        if (newScaleGroup * Math.abs(percent) > blockUse[groupCurr].scale) {
-            target.scale = newScaleGroup * Math.abs(percent);
-        }
-    }
-
-}
-function onMouseUp(evt) {
-    pressMove = false;
-    var location = currentMouse(evt);
-    var target = blockUse[groupCurr].target;
-    var standard = { x: indexHint.realityX, y: indexHint.realityY }
-    if (target.x >= standard.x - game.block.width / 2 && target.x <= standard.x + game.block.width / 2 && groupCurr == 0) {
-        if (target.y >= standard.y - game.block.width / 2 && target.y <= standard.y + game.block.width / 2) {
-            removeEvent(target);
-            if (level1.step[levelCurr][hintCurr + 1].hint.length != 0) {
-                hintCurr++;
-                numGroup++;
-                blockToContainer()
-                createGroupBlockFree();
-                removeBlock(0);
-                if (hintCurr == 1) removeHand();
-            } else {
-                removeHand()
-                blockToContainer()
-                groupHint.removeAllChildren()
-                removeBlock(1);
-            }
-        } else {
-            target.x = blockUse[groupCurr].x;
-            target.y = blockUse[groupCurr].y;
-            target.scale = blockUse[groupCurr].scale;
-        }
-    } else {
-        target.x = blockUse[groupCurr].x;
-        target.y = blockUse[groupCurr].y;
-        target.scale = blockUse[groupCurr].scale;
-    }
+    distanceGTH = getDistance(location, { x: location.x, y: game.map[9][0].y })
 }
 
 // Free
-function addEventFree() {
-    for (let i = 0; i < blockUse.length; i++) {
-        const target = blockUse[i].target;
-        if (isMobile) {
-            if (target) {
-                target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchmove", onPressMoveFree, supportsPassive ? { passive: true } : false);
-                canvas.addEventListener("touchend", onMouseUpFree, supportsPassive ? { passive: true } : false);
-                target.myParam = i;
-            }
-        } else {
-            if (target) {
-                target.addEventListener("mousedown", onMouseDown);
-                canvas.addEventListener("mousemove", onPressMoveFree);
-                canvas.addEventListener("mouseup", onMouseUpFree);
-                target.myParam = i;
-            }
-        }
+function addEventFree(target, i) {
+    if (isMobile) {
+        target.addEventListener("mousedown", onMouseDown, supportsPassive ? { passive: true } : false);
+        canvas.addEventListener("touchmove", onPressMove, supportsPassive ? { passive: true } : false);
+        canvas.addEventListener("touchend", onMouseUp, supportsPassive ? { passive: true } : false);
+        target.myParam = i;
+
+    } else {
+        target.addEventListener("mousedown", onMouseDown);
+        canvas.addEventListener("mousemove", onPressMove);
+        canvas.addEventListener("mouseup", onMouseUp);
+        target.myParam = i;
+
     }
+
 }
-function onPressMoveFree(evt) {
+function onPressMove(evt) {
     if (pressMove) {
+        pressUp = true;
         var location = currentMouse(evt);
         var target = blockUse[groupCurr].target;
         target.x = location.x;
         target.y = location.y;
         var scaleItem = blockUse[groupCurr].target.children[0].scale;
-        newScaleGroup = scale / scaleItem;
+        var newScaleGroup = scale / scaleItem;
         var percent
         if (location.y > game.map[9][0].y + game.block.width) {
             var distance = location.y - (game.map[9][0].y + game.block.width);
@@ -712,52 +381,52 @@ function onPressMoveFree(evt) {
         if (newScaleGroup * Math.abs(percent) > blockUse[groupCurr].scale) {
             target.scale = newScaleGroup * Math.abs(percent);
         }
-        renderHintFree(location)
+        renderHint(location)
     }
 }
-function onMouseUpFree(evt) {
+function onMouseUp(evt) {
+    if (pressUp) {
 
-    pressMove = false;
-    containerNew = []
-    // var location = currentMouse(evt);
-    var target = blockUse[groupCurr].target;
-    if (hintFree.length != 0) {
-        scores += hintFree.length * 10
-        text_scores.text = scores;
-        text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
-        removeHand()
-        removeEvent(target);
-        const color = blockUse[groupCurr].color;
-        var colorstr = convertBlock(color);
-        var block = new createjs.Sprite(spriteSheet, colorstr);
-        block.scale = scale;
-        for (let i = 0; i < hintFree.length; i++) {
-            const hint = hintFree[i].hint;
-            const item = game.map[hintFree[i].y][hintFree[i].x]
-            var newblock = block.clone()
-            newblock.x = hint.x
-            newblock.y = hint.y
-            containerMain.addChild(newblock);
-            containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
-            game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color }
+        pressMove = false;
+        containerNew = []
+        var target = blockUse[groupCurr].target;
+        if (hintFree.length != 0) {
+            scores += hintFree.length * 10
+            text_scores.text = scores;
+            text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
+            removeHand()
+            const color = blockUse[groupCurr].color;
+            var colorstr = convertBlock(color);
+            var block = new createjs.Sprite(spriteSheet, colorstr);
+            block.scale = scale;
+            for (let i = 0; i < hintFree.length; i++) {
+                const hint = hintFree[i].hint;
+                const item = game.map[hintFree[i].y][hintFree[i].x]
+                var newblock = block.clone()
+                newblock.x = hint.x
+                newblock.y = hint.y
+                containerMain.addChild(newblock);
+                containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
+                game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color }
+            }
+            removeBlock();
+            blockUse[groupCurr].target.removeAllChildren()
+            stage.removeChild(blockUse[groupCurr].target)
+            blockUse[groupCurr].target = null
+            createGroupBlockFree();
+            endGame();
+        } else {
+            target.x = blockUse[groupCurr].x;
+            target.y = blockUse[groupCurr].y;
+            target.scale = blockUse[groupCurr].scale;
         }
-        removeBlock(2);
-        blockUse[groupCurr].target.removeAllChildren()
-        stage.removeChild(blockUse[groupCurr].target)
-        blockUse[groupCurr].target = null
-        createGroupBlockFree();
-        addEventFree();
-        endGame();
-    } else {
-        target.x = blockUse[groupCurr].x;
-        target.y = blockUse[groupCurr].y;
-        target.scale = blockUse[groupCurr].scale;
+        pressUp = false
     }
 }
-function renderHintFree(location) {
+function renderHint(location) {
     var array = [];
     var render = true
-    removeHintFree()
+    removeHint()
     var index = lToI(location)
     var blockChild = blockUse[groupCurr].target.children
     var hint = new createjs.Sprite(spriteSheet, "square_hint");
@@ -792,11 +461,12 @@ function renderHintFree(location) {
         }
     }
 }
-function removeHintFree() {
+function removeHint() {
     for (let i = 0; i < hintFree.length; i++) {
         const hint = hintFree[i].hint;
         containerMain.removeChild(hint)
     }
+    hintFree = [];
 }
 function createGroupBlockFree() {
     var render = true
@@ -805,39 +475,25 @@ function createGroupBlockFree() {
         if (target != null) render = false
     }
     if (render) {
-        stepFree++
-        if (stepFree < 8) {
-            for (let i = 0; i < 3; i++) {
-                var block = blockFree[Math.floor(Math.random() * blockFree.length)]
-                var color = Math.floor(Math.random() * 8)
-                renderGroupBlock(block, color, i);
-            }
-        } else {
-            for (let i = 0; i < 3; i++) {
-                var block = blockFreeHard[Math.floor(Math.random() * blockFreeHard.length)]
-                var color = Math.floor(Math.random() * 8)
-                renderGroupBlock(block, color, i);
-            }
+        blockUse = []
+        for (let i = 0; i < 3; i++) {
+            var block = blockFree[Math.floor(Math.random() * blockFree.length)]
+            var color = Math.floor(Math.random() * 8)
+            renderGroupBlock(block, color, i);
         }
-
     }
 }
 
 //Collision
-function removeBlock(remove) {
+function removeBlock() {
     const removeArray = checkRC()
     var removeArr = removeArray.arr
     scores += removeArray.lengthRemove * 15
     text_scores.text = scores;
     text_scores.x = (stage.canvas.width - text_scores.getMeasuredWidth() * text_scores.scale) / 2
 
-    if (remove == 0) {
-        addEvent();
-        renderBlockHint();
-    } else if (remove == 2) {
-        removeHintFree();
-        hintFree = [];
-    }
+    removeHint();
+
     for (let i = 0; i < removeArr.length; i++) {
         const index = removeArr[i];
         const item = game.map[index.y][index.x]
@@ -847,35 +503,8 @@ function removeBlock(remove) {
         block.y = block.y + game.block.width / 4
         createjs.Tween.get(block)
             .to({ rotation: 180, scale: 0 }, 500)
-            .call(() => {
-                containerMain.removeChild(block);
-                if (i == removeArr.length - 1) {
-                    if (remove == 1) newLevel()
-                }
-            });
+            .call(() => { containerMain.removeChild(block); });
         game.map[index.y][index.x] = { x: item.x, y: item.y, existing: false, block: null, color: null }
-    }
-}
-function newLevel() {
-    if (levelCurr + 1 <= level1.map.length - 2) {
-        containerMain.removeAllChildren()
-        removeGrBlock()
-        hintCurr = 0
-        levelCurr++
-        var map = level1.map[levelCurr];
-        game.map = setMap(map);
-        renderBlockHint();
-        renderGroupBlockDefault();
-        addHand()
-        addEvent();
-    } else {
-        freeUser = true
-        containerMain.removeAllChildren()
-        removeGrBlock()
-        var map = level1.map[3];
-        game.map = setMap(map);
-        renderGroupBlockDefault()
-        addEventFree();
     }
 }
 // check row and column
@@ -924,6 +553,7 @@ function checkRC() {
 function endGame() {
     var close = checkLose();
     if (close) {
+        createjs.Tween.removeTweens(install_now)
         stage.removeChild(install_now);
         removeAllEvent()
         var particle = new createjs.Shape();
@@ -935,8 +565,6 @@ function endGame() {
         bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
         bgcore.y = stage.canvas.height / 5
         bgcore.alpha = 1
-
-
         var best = new createjs.Text('BEST', "22px Impact", "#ffffff");
 
         best.scale = (stage.canvas.width / 10) / best.getMeasuredWidth()
@@ -1092,4 +720,58 @@ function currentMouse(evt) {
     }
     else if (isMobile) return { x: evt.changedTouches[0].clientX, y: evt.changedTouches[0].clientY }
     else return { x: evt.layerX, y: evt.layerY }
+}
+function callEndTime() {
+    setTimeout(setEndTime, 45000);
+}
+function setEndTime() {
+
+    createjs.Tween.removeTweens(install_now)
+    removeAllEvent()
+
+    var bg = new createjs.Sprite(spriteSheet, "bg");
+    bg.scaleX = stage.canvas.width / bg.getBounds().width;
+    bg.scaleY = stage.canvas.height / bg.getBounds().height;
+    bg.alpha = 0.9
+
+
+    var logo = new createjs.Sprite(spriteSheet, "logo");
+    logo.scale = (stage.canvas.width / 3.5) / logo.getBounds().width
+    logo.x = (stage.canvas.width - logo.getBounds().width * logo.scale) / 2
+    logo.y = stage.canvas.height / 9
+
+    var vlock = new createjs.Sprite(spriteSheet, "vlock");
+    vlock.scale = (stage.canvas.width * 2.3 / 3) / vlock.getBounds().width
+    vlock.x = (stage.canvas.width - vlock.getBounds().width * vlock.scale) / 2
+    vlock.y = logo.y + logo.getBounds().height * logo.scale * 1.3
+
+    var img1010 = new createjs.Sprite(spriteSheet, "img1010");
+    img1010.scale = vlock.scale
+    img1010.x = (stage.canvas.width - img1010.getBounds().width * img1010.scale) / 2
+    img1010.y = vlock.y + vlock.getBounds().height * vlock.scale * 1.2
+
+
+    var contineu = new createjs.Sprite(spriteSheet, "contineu");
+    contineu.scale = (stage.canvas.width / 2.7) / contineu.getBounds().width
+    contineu.x = (stage.canvas.width - contineu.getBounds().width * contineu.scale) / 2
+    contineu.y = img1010.y + img1010.getBounds().height * img1010.scale * 1.8
+
+    stage.addChild(bg, contineu, logo, vlock, img1010);
+
+
+    var contineux = contineu.x,
+        contineuy = contineu.y,
+        contineuscale = stage.canvas.width / 2.7 / contineu.getBounds().width;
+    createjs.Tween.get(contineu, { loop: true })
+        .to(
+            {
+                scale: (stage.canvas.width / 4) / contineu.getBounds().width,
+                x: (stage.canvas.width - ((stage.canvas.width / 4) / contineu.getBounds().width) * contineu.getBounds().width) / 2,
+                y: contineuy - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
+            },
+            500,
+            createjs.Ease.linear
+        )
+        .to({ scale: contineuscale, x: contineux, y: contineuy }, 500, createjs.Ease.linear);
+    contineu.addEventListener("click", () => { getLinkInstall() }, false);
 }

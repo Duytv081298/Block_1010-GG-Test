@@ -200,20 +200,20 @@ function setBackground() {
     bestText.scaleX = ((best.getBounds().height * best.scale * 0.9) / bestText.getMeasuredHeight()) / 1.5;
     bestText.scaleY = bestText.scaleX / 1.5
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + (best.getBounds().height * best.scaleY - bestText.getMeasuredHeight() * bestText.scale) / 2
+    bestText.y = best.y + (best.getBounds().height * best.scaleY - bestText.getMeasuredHeight() * bestText.scale) / 1.5
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX
     txtBesttemp.scaleY = bestText.scaleY
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
-    txtBesttemp.y = best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 2
+    txtBesttemp.y = best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.5
 
 
 
 
     txtBest = {
         x: best.x + best.getBounds().width * best.scale - stage.canvas.width / 10,
-        y: best.y + best.getBounds().height * best.scale / 2,
+        y: best.y + best.getBounds().height * best.scale / 1.5,
         txt: txtBesttemp
     }
     var score = new createjs.Sprite(spriteSheet, "score");
@@ -227,7 +227,7 @@ function setBackground() {
     scoreText.scaleX = bestText.scaleX
     scoreText.scaleY = bestText.scaleY
     scoreText.x = score.x + stage.canvas.width / 25
-    scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * bestText.scale) / 2
+    scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * bestText.scale) / 1.5
 
 
     var txtScore = new createjs.Text(scoresTemp, "30px Haettenschweiler", "#eaf7ff");
@@ -235,11 +235,11 @@ function setBackground() {
     txtScore.scaleX = bestText.scaleX
     txtScore.scaleY = bestText.scaleY
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
-    txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 2
+    txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.5
 
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
-        y: score.y + score.getBounds().height * score.scale / 2,
+        y: score.y + score.getBounds().height * score.scale / 1.5,
         txt: txtScore
     }
 
@@ -960,12 +960,12 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scale / 2;
+            txtScores.txt.y = txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scale / 1.5;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
                 game.best = scoresTemp
                 txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scale / 2;
+                txtBest.txt.y = txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scale / 1.5;
                 txtBest.txt.text = scoresTemp;
             }
         }

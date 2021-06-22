@@ -350,7 +350,7 @@ function addHand() {
     hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
     stage.addChild(hand_tut);
     createjs.Tween.get(hand_tut, { loop: true })
-        .to({ x: game.map[3][1].x, y: game.map[3][1].y }, 1500)
+        .to({ x: game.map[5][10].x, y: game.map[5][10].y }, 1500)
         .wait(300)
         .to({ x: blockUse[1].x - hand_tut.getBounds().width * hand_tut.scale * 0.5, y: blockUse[1].y + (blockUse[1].height * storageBlock.height / 6) / 2 }, 1500)
         .wait(300)

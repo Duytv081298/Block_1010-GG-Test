@@ -9,7 +9,7 @@ var height = window.innerHeight
     || document.body.clientHeight;
 width = isMobile ? width : height / 1.7;
 var canvas, stage, update = true;
-var supportsPassive = false, pressMove = false, pressUp = false;
+var supportsPassive = false, pressMove = false;
 var game = {
     block: { width: 0, height: 0 },
     scale: 0,
@@ -204,7 +204,7 @@ function setBackground() {
     bestText.scale = (stage.canvas.width / 12) / bestText.getMeasuredWidth();
     bestText.x = best.x + stage.canvas.width / 25
     // bestText.y = best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 3
-    bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 1.5
+    bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 1.7
         : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 3
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
@@ -212,12 +212,12 @@ function setBackground() {
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
     txtBesttemp.y = best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 3
 
-    txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.5
+    txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.7
         : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 3
 
     txtBest = {
         x: best.x + best.getBounds().width * best.scale - stage.canvas.width / 10,
-        y: isMobile ? best.y + best.getBounds().height * best.scaleY / 1.5 : best.y + best.getBounds().height * best.scaleY / 3,
+        y: isMobile ? best.y + best.getBounds().height * best.scaleY / 1.7 : best.y + best.getBounds().height * best.scaleY / 3,
         txt: txtBesttemp
     }
     var score = new createjs.Sprite(spriteSheet, "score");
@@ -231,7 +231,7 @@ function setBackground() {
     scoreText.scale = bestText.scale
     scoreText.x = score.x + stage.canvas.width / 25
     // scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
-    scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 1.5
+    scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 1.7
         : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
 
     var txtScore = new createjs.Text(scoresTemp, "30px Haettenschweiler", "#eaf7ff");
@@ -240,11 +240,11 @@ function setBackground() {
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
 
     // txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
-    txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.5
+    txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.7
         : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
-        y: isMobile ? score.y + score.getBounds().height * score.scaleY / 1.5 : score.y + score.getBounds().height * score.scaleY / 3,
+        y: isMobile ? score.y + score.getBounds().height * score.scaleY / 1.7 : score.y + score.getBounds().height * score.scaleY / 3,
         txt: txtScore
     }
 
@@ -410,7 +410,7 @@ function onMouseDown(evt) {
     var scaleItem = blockUse[groupCurr].target.children[0].scale;
     var newScaleGroup = game.scale / scaleItem;
     var widthGrBlock = blockUse[groupCurr].width * storageBlock.height / 6 * target.scale
-    var heightGrBlock = (blockUse[groupCurr].height + 2) * storageBlock.height / 6 * target.scale
+    var heightGrBlock = isMobile ? (blockUse[groupCurr].height + 2) * storageBlock.height / 6 * target.scale : blockUse[groupCurr].height * storageBlock.height / 6 * target.scale
     grWHCrr = { width: widthGrBlock, height: heightGrBlock }
     target.x = location.x - grWHCrr.width / 2;
     target.y = location.y - grWHCrr.height;
@@ -436,12 +436,8 @@ function addEventFree(target, i) {
 }
 function onPressMove(evt) {
     if (pressMove) {
-        pressUp = true;
         var location = currentMouse(evt);
         var target = blockUse[groupCurr].target;
-        var widthGrBlock = blockUse[groupCurr].width * storageBlock.height / 6 * target.scale
-        var heightGrBlock = isMobile ? (blockUse[groupCurr].height + 2) * storageBlock.height / 6 * target.scale : blockUse[groupCurr].height * storageBlock.height / 6 * target.scale
-        grWHCrr = { width: widthGrBlock, height: heightGrBlock }
         target.x = location.x - grWHCrr.width / 2;
         target.y = location.y - grWHCrr.height;
         var scaleItem = blockUse[groupCurr].target.children[0].scale;
@@ -451,43 +447,40 @@ function onPressMove(evt) {
     }
 }
 function onMouseUp(evt) {
-    if (pressUp) {
-        snd.play();
-        pressMove = false;
-        containerNew = []
-        var target = blockUse[groupCurr].target;
-        if (hintFree.length != 0) {
-            lowerBlock = true;
-            removeHand()
-            game.scores += hintFree.length * 5
-            updateScore()
-            const color = blockUse[groupCurr].color;
-            var colorstr = convertBlock(color);
-            var block = new createjs.Sprite(spriteSheet, colorstr);
-            block.scale = game.scale;
-            for (let i = 0; i < hintFree.length; i++) {
-                const hint = hintFree[i].hint;
-                const item = game.map[hintFree[i].y][hintFree[i].x]
-                var newblock = block.clone()
-                newblock.x = hint.x
-                newblock.y = hint.y
-                containerMain.addChild(newblock);
-                containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
-                game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color, colorTemp: item.colorTemp, blockTemp: item.blockTemp }
-            }
-            removeBlock();
-            blockUse[groupCurr].target.removeAllChildren()
-            stage.removeChild(blockUse[groupCurr].target)
-            blockUse[groupCurr].target = null
-            createGroupBlockFree();
-            endGame();
-
-        } else {
-            target.x = blockUse[groupCurr].x;
-            target.y = blockUse[groupCurr].y;
-            // target.scale = blockUse[groupCurr].scale;
+    snd.play();
+    pressMove = false;
+    containerNew = []
+    var target = blockUse[groupCurr].target;
+    if (hintFree.length != 0) {
+        lowerBlock = true;
+        removeHand()
+        game.scores += hintFree.length * 5
+        updateScore()
+        const color = blockUse[groupCurr].color;
+        var colorstr = convertBlock(color);
+        var block = new createjs.Sprite(spriteSheet, colorstr);
+        block.scale = game.scale;
+        for (let i = 0; i < hintFree.length; i++) {
+            const hint = hintFree[i].hint;
+            const item = game.map[hintFree[i].y][hintFree[i].x]
+            var newblock = block.clone()
+            newblock.x = hint.x
+            newblock.y = hint.y
+            containerMain.addChild(newblock);
+            containerNew.push({ x: hintFree[i].x, y: hintFree[i].y })
+            game.map[hintFree[i].y][hintFree[i].x] = { x: item.x, y: item.y, existing: true, block: newblock, color: color, colorTemp: item.colorTemp, blockTemp: item.blockTemp }
         }
-        pressUp = false
+        removeBlock();
+        blockUse[groupCurr].target.removeAllChildren()
+        stage.removeChild(blockUse[groupCurr].target)
+        blockUse[groupCurr].target = null
+        createGroupBlockFree();
+        endGame();
+
+    } else {
+        target.x = blockUse[groupCurr].x;
+        target.y = blockUse[groupCurr].y;
+        // target.scale = blockUse[groupCurr].scale;
     }
 }
 
@@ -933,12 +926,12 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = isMobile ? txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.5 : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 3;
+            txtScores.txt.y = isMobile ? txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.7 : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 3;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
                 game.best = scoresTemp
                 txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = isMobile ? txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.5 : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 3;
+                txtBest.txt.y = isMobile ? txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.7 : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 3;
                 txtBest.txt.text = scoresTemp;
             }
         }

@@ -186,7 +186,7 @@ function setStage() {
 }
 function setBackground() {
     randomN = 1.5
-    console.log('1111111111111');
+    console.log('22222222');
 
     var bg = new createjs.Sprite(spriteSheet, "bg");
     bg.scaleX = stage.canvas.width / bg.getBounds().width;
@@ -203,7 +203,7 @@ function setBackground() {
     bestText.scaleX = ((best.getBounds().height * best.scale * 0.7) / bestText.getMeasuredHeight());
     bestText.scaleY = bestText.scaleX / 1.3
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + (best.getBounds().height * best.scale ) / 3
+    bestText.y = best.y + (best.getBounds().height * best.scale) / 1.5
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX

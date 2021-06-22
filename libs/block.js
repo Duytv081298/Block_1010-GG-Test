@@ -203,15 +203,16 @@ function setBackground() {
     bestText.scaleX = ((best.getBounds().height * best.scale * 0.6) / bestText.getMeasuredHeight());
     bestText.scaleY = bestText.scaleX / 1.3
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 2
+    bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 1.5
         : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 3
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX
     txtBesttemp.scaleY = bestText.scaleY
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
-    txtBesttemp.y = best.y + best.getBounds().height * best.scale / 1.5
-    txtBesttemp.y = isMobile ? txtBesttemp.y : txtBesttemp.y - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY / 1.5
+
+    txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 1.5
+        : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 3
 
 
 
@@ -232,15 +233,18 @@ function setBackground() {
     scoreText.scaleX = bestText.scaleX
     scoreText.scaleY = bestText.scaleY
     scoreText.x = score.x + stage.canvas.width / 25
-    scoreText.y = isMobile ? score.y + score.getBounds().height * score.scale / 1.5 : score.y + score.getBounds().height * score.scale / 1.5 - scoreText.getMeasuredHeight() * scoreText.scaleY / 1.5
 
+    scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 1.5
+        : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 3
 
     var txtScore = new createjs.Text(scoresTemp, "30px Haettenschweiler", "#eaf7ff");
 
     txtScore.scaleX = bestText.scaleX
     txtScore.scaleY = bestText.scaleY
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
-    txtScore.y = isMobile ? score.y + score.getBounds().height * score.scale / 1.5 : score.y + score.getBounds().height * score.scale / 1.5 - txtScore.getMeasuredHeight() * txtScore.scaleY / 1.5
+
+    txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 1.5
+        : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 3
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
         y: score.y + score.getBounds().height * score.scale / 1.5,

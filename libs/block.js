@@ -27,7 +27,6 @@ var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distance
 var hand_tut, scoresTemp = 0, install_now, removeArray = [];
 var txtBest, txtScores;
 var tempX, tempY;
-var randomN;
 const blockFree = [
     [[0, 1], [1, 1], [0, 1]],
     [[1, 1], [1, 1]],
@@ -187,7 +186,7 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
-    randomN = 1.5
+    var randomN = isMobile ? 0.67 : 0.75
     console.log('22222222');
 
     var bg = new createjs.Sprite(spriteSheet, "bg");
@@ -204,7 +203,7 @@ function setBackground() {
     bestText.scale = (stage.canvas.width / 12) / bestText.getMeasuredWidth();
     bestText.textBaseline = "alphabetic";
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + best.getBounds().height * best.scale * 0.75
+    bestText.y = best.y + best.getBounds().height * best.scale * randomN
     // bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 1.7
     //     : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 3
 
@@ -212,13 +211,13 @@ function setBackground() {
     txtBesttemp.scale = bestText.scale
     txtBesttemp.textBaseline = "alphabetic";
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
-    txtBesttemp.y = best.y + best.getBounds().height * best.scale * 0.75
+    txtBesttemp.y = best.y + best.getBounds().height * best.scale * randomN
     // txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.7
     //     : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 3
 
     txtBest = {
         x: best.x + best.getBounds().width * best.scale - stage.canvas.width / 10,
-        y: best.y + best.getBounds().height * best.scale * 0.75,
+        y: best.y + best.getBounds().height * best.scale * randomN,
         txt: txtBesttemp
     }
     var score = new createjs.Sprite(spriteSheet, "score");
@@ -232,7 +231,7 @@ function setBackground() {
     scoreText.scale = bestText.scale
     scoreText.textBaseline = "alphabetic";
     scoreText.x = score.x + stage.canvas.width / 25
-    scoreText.y = score.y + best.getBounds().height * score.scale * 0.75
+    scoreText.y = score.y + best.getBounds().height * score.scale * randomN
     // scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
     // scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 1.7
     //     : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
@@ -242,13 +241,13 @@ function setBackground() {
     txtScore.scale = bestText.scale
     txtScore.textBaseline = "alphabetic";
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
-    txtScore.y = score.y + best.getBounds().height * score.scale * 0.75
+    txtScore.y = score.y + best.getBounds().height * score.scale * randomN
     // txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
     // txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.7
     //     : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
-        y: score.y + best.getBounds().height * score.scale * 0.75,
+        y: score.y + best.getBounds().height * score.scale * randomN,
         txt: txtScore
     }
 

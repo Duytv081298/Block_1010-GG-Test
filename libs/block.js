@@ -186,6 +186,7 @@ function setStage() {
 }
 function setBackground() {
     randomN = 1.5
+    console.log('ssssssssssss');
 
     var bg = new createjs.Sprite(spriteSheet, "bg");
     bg.scaleX = stage.canvas.width / bg.getBounds().width;

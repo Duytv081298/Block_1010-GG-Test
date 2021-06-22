@@ -214,12 +214,9 @@ function setBackground() {
     txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 1.5
         : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 3
 
-
-
-
     txtBest = {
         x: best.x + best.getBounds().width * best.scale - stage.canvas.width / 10,
-        y: best.y + best.getBounds().height * best.scale / 1.5,
+        y: isMobile ? best.y + best.getBounds().height * best.scaleY / 1.5 : best.y + best.getBounds().height * best.scaleY / 3,
         txt: txtBesttemp
     }
     var score = new createjs.Sprite(spriteSheet, "score");
@@ -247,7 +244,7 @@ function setBackground() {
         : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 3
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
-        y: score.y + score.getBounds().height * score.scale / 1.5,
+        y: isMobile ? score.y + score.getBounds().height * score.scaleY / 1.5 : score.y + score.getBounds().height * score.scaleY / 3,
         txt: txtScore
     }
 
@@ -937,13 +934,13 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = isMobile ? txtScores.y : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.5;
+            txtScores.txt.y = isMobile ? txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.5 : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 3;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
                 F
                 game.best = scoresTemp
                 txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = isMobile ? txtBest.y : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.5;
+                txtBest.txt.y = isMobile ? txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.5 : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 3;
                 txtBest.txt.text = scoresTemp;
             }
         }

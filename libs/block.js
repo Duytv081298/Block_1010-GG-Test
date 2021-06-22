@@ -27,6 +27,7 @@ var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distance
 var hand_tut, scoresTemp = 0, install_now, removeArray = [];
 var txtBest, txtScores;
 var tempX, tempY;
+var randomN;
 const blockFree = [
     [[0, 1], [1, 1], [0, 1]],
     [[1, 1], [1, 1]],
@@ -184,6 +185,7 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
+    randomN = 1.5
 
     var bg = new createjs.Sprite(spriteSheet, "bg");
     bg.scaleX = stage.canvas.width / bg.getBounds().width;
@@ -197,10 +199,10 @@ function setBackground() {
 
 
     var bestText = new createjs.Text('BEST', "30px Haettenschweiler", "#24e6f1");
-    bestText.scaleX = ((best.getBounds().height * best.scale * 0.9) / bestText.getMeasuredHeight()) / 1.5;
-    bestText.scaleY = bestText.scaleX / 1.5
+    bestText.scaleX = ((best.getBounds().height * best.scale * 0.7) / bestText.getMeasuredHeight());
+    bestText.scaleY = bestText.scaleX / 1.3
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + (best.getBounds().height * best.scaleY - bestText.getMeasuredHeight() * bestText.scale) / 1.5
+    bestText.y = best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 3
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX

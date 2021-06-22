@@ -105,23 +105,23 @@ function setAnimation() {
             [1761, 145, 46, 46, 0, 0, 0],
             [1761, 193, 46, 46, 0, 0, 0],
             [885, 234, 864, 110, 0, 0, 0],
-            [1751, 241, 46, 46, 0, 0, 0],
-            [1751, 289, 46, 46, 0, 0, 0],
-            [1751, 337, 46, 46, 0, 0, 0],
             [885, 346, 300, 533, 0, 0, 0],
-            [1187, 385, 622, 111, 0, 0, 0],
-            [1187, 498, 300, 300, 0, 0, 0],
-            [1489, 498, 300, 99, 0, 0, 0],
-            [1187, 800, 205, 67, 0, 0, 0],
-            [1394, 800, 200, 53, 0, 0, 0],
-            [1596, 599, 200, 53, 0, 0, 0],
-            [1596, 654, 200, 53, 0, 0, 0],
-            [1489, 709, 45, 53, 0, -5, -1],
-            [1536, 599, 46, 46, 0, 0, 0]
+            [1187, 346, 622, 111, 0, 0, 0],
+            [1751, 241, 46, 46, 0, 0, 0],
+            [1751, 289, 45, 53, 0, -5, -1],
+            [1187, 459, 300, 300, 0, 0, 0],
+            [1489, 459, 300, 99, 0, 0, 0],
+            [1187, 761, 205, 67, 0, 0, 0],
+            [1187, 830, 200, 53, 0, 0, 0],
+            [1389, 830, 200, 53, 0, 0, 0],
+            [1394, 761, 200, 53, 0, 0, 0],
+            [1596, 560, 200, 53, 0, 0, 0],
+            [1591, 816, 46, 46, 0, 0, 0],
+            [1489, 560, 46, 46, 0, 0, 0],
+            [1537, 560, 46, 46, 0, 0, 0]
         ],
 
         "animations": {
-            "img1010": { "frames": [15] },
             "grid": { "frames": [0] },
             "bot": { "frames": [1] },
             "block_blue": { "frames": [2] },
@@ -130,18 +130,20 @@ function setAnimation() {
             "block_orange": { "frames": [5] },
             "block_pink": { "frames": [6] },
             "score": { "frames": [7] },
-            "block_purple": { "frames": [8] },
-            "block_red": { "frames": [9] },
-            "block_yellow": { "frames": [10] },
-            "bg": { "frames": [11] },
-            "best": { "frames": [12] },
-            "logo": { "frames": [13] },
-            "vlock": { "frames": [14] },
-            "play_again": { "frames": [16] },
-            "continue": { "frames": [17] },
-            "install_now": { "frames": [18] },
-            "hand_tut": { "frames": [19] },
-            "square_hint": { "frames": [20] }
+            "bg": { "frames": [8] },
+            "best": { "frames": [9] },
+            "block_purple": { "frames": [10] },
+            "hand_tut": { "frames": [11] },
+            "logo": { "frames": [12] },
+            "vlock": { "frames": [13] },
+            "img1010": { "frames": [14] },
+            "btn_again": { "frames": [15] },
+            "continue": { "frames": [16] },
+            "install_now": { "frames": [17] },
+            "play_again": { "frames": [18] },
+            "block_red": { "frames": [19] },
+            "block_yellow": { "frames": [20] },
+            "square_hint": { "frames": [21] }
         },
     });
     setBackground();
@@ -198,25 +200,24 @@ function setBackground() {
     best.x = stage.canvas.width / 14
     best.y = stage.canvas.height / 15
 
-    console.log(isMobile);
     var bestText = new createjs.Text('BEST', "30px Haettenschweiler", "#24e6f1");
-    bestText.scaleX = ((best.getBounds().height * best.scale * 0.6) / bestText.getMeasuredHeight());
-    bestText.scaleY = bestText.scaleX / 1.3
+    bestText.scale = (stage.canvas.width / 12) / bestText.getMeasuredWidth();
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 1.5
-        : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 3
+    bestText.y = best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 3
+    // bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 1.5
+    //     : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 3
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
-    txtBesttemp.scaleX = bestText.scaleX
-    txtBesttemp.scaleY = bestText.scaleY
+    txtBesttemp.scale = bestText.scale
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
+    txtBesttemp.y = best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 3
 
-    txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 1.5
-        : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 3
+    // txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 1.5
+    //     : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY) / 3
 
     txtBest = {
         x: best.x + best.getBounds().width * best.scale - stage.canvas.width / 10,
-        y: isMobile ? best.y + best.getBounds().height * best.scaleY / 1.5 : best.y + best.getBounds().height * best.scaleY / 3,
+        y: best.y + best.getBounds().height * best.scaleY / 3,
         txt: txtBesttemp
     }
     var score = new createjs.Sprite(spriteSheet, "score");
@@ -227,24 +228,23 @@ function setBackground() {
 
     var scoreText = new createjs.Text('SCORE', "30px Haettenschweiler", "#24e6f1");
 
-    scoreText.scaleX = bestText.scaleX
-    scoreText.scaleY = bestText.scaleY
+    scoreText.scale = bestText.scale
     scoreText.x = score.x + stage.canvas.width / 25
-
-    scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 1.5
-        : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 3
+    scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
+    // scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 1.5
+    //     : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scaleY) / 3
 
     var txtScore = new createjs.Text(scoresTemp, "30px Haettenschweiler", "#eaf7ff");
 
-    txtScore.scaleX = bestText.scaleX
-    txtScore.scaleY = bestText.scaleY
+    txtScore.scale = bestText.scale
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
 
-    txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 1.5
-        : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 3
+    txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
+    // txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 1.5
+    //     : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scaleY) / 3
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
-        y: isMobile ? score.y + score.getBounds().height * score.scaleY / 1.5 : score.y + score.getBounds().height * score.scaleY / 3,
+        y: score.y + score.getBounds().height * score.scaleY / 3,
         txt: txtScore
     }
 
@@ -705,35 +705,34 @@ function endGame() {
         removeAllEvent()
         var particle = new createjs.Shape();
         particle.graphics.f("#fafafa").dr(0, 0, stage.canvas.width, stage.canvas.height);
-        particle.alpha = 0.4
+        particle.alpha = 0.7
 
         var bgcore = new createjs.Shape();
         bgcore.graphics.lf(["#2d3779", "#58407b"], [0, 1], stage.canvas.width / 4, 0, stage.canvas.width / 4, stage.canvas.height / 5);
-        bgcore.graphics.rc(0, 0, stage.canvas.width / 2, stage.canvas.height / 5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
-        bgcore.x = (stage.canvas.width - stage.canvas.width / 2) / 2
-        bgcore.y = stage.canvas.height / 4.7
+        bgcore.graphics.rc(0, 0, stage.canvas.width / 1.7, stage.canvas.height / 4.5, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50, stage.canvas.width / 50);
+        bgcore.x = (stage.canvas.width - stage.canvas.width / 1.7) / 2
+        bgcore.y = stage.canvas.height / 3.3
         bgcore.alpha = 1
 
-        var best = new createjs.Text('BEST', "Italic 30px Impact", "#ffffff");
-        best.scale = (stage.canvas.width / 7) / best.getMeasuredWidth()
+        var txt = game.scores > game.best ? "BEST" : "Your Score"
+        var best = new createjs.Text(txt, "30px Impact", "#ffffff");
+        best.scale = game.scores > game.best ? (stage.canvas.width / 6.5) / best.getMeasuredWidth() : (stage.canvas.width / 3) / best.getMeasuredWidth()
         best.x = (stage.canvas.width - best.getMeasuredWidth() * best.scale) / 2
         best.y = bgcore.y + best.getMeasuredHeight() * best.scale
         var text = new createjs.Text(game.scores, "30px Impact", "#ffffff");
         if (game.scores < 1000) {
-            text.scale = (stage.canvas.width / 6.5) / text.getMeasuredWidth()
-            text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
-            text.y = bgcore.y * 2 - text.getMeasuredHeight() * text.scale * 1.6
+            text.scale = (stage.canvas.width / 5) / text.getMeasuredWidth()
         } else {
-            text.scale = (stage.canvas.width / 5.5) / text.getMeasuredWidth()
-            text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
-            text.y = bgcore.y * 2 - text.getMeasuredHeight() * text.scale * 1.8
+            text.scale = (stage.canvas.width / 4.4) / text.getMeasuredWidth()
         }
+        text.y = best.y + best.getMeasuredHeight() * best.scale * 2
+        text.x = (stage.canvas.width - text.getMeasuredWidth() * text.scale) / 2
 
 
         var play_again = new createjs.Sprite(spriteSheet, "play_again");
         play_again.scale = (stage.canvas.width / 2.7) / play_again.getBounds().width
         play_again.x = (stage.canvas.width - play_again.getBounds().width * play_again.scale) / 2
-        play_again.y = text.y + play_again.getBounds().height * play_again.scale * 2.5
+        play_again.y = text.y + play_again.getBounds().height * play_again.scale * 3.5
 
         stage.addChild(particle, bgcore, best, text, play_again);
 
@@ -934,13 +933,12 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = isMobile ? txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.5 : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 3;
+            txtScores.txt.y = txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 3;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
-                F
                 game.best = scoresTemp
                 txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = isMobile ? txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.5 : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 3;
+                txtBest.txt.y = txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 3;
                 txtBest.txt.text = scoresTemp;
             }
         }

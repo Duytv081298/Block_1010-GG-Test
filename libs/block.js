@@ -186,7 +186,7 @@ function setStage() {
     canvas.width = width;
 }
 function setBackground() {
-    var randomN = isMobile ? 0.7 : 0.75
+    var randomN = isMobile ? 0.53 : 0.51
 
     var bg = new createjs.Sprite(spriteSheet, "bg");
     bg.scaleX = stage.canvas.width / bg.getBounds().width;
@@ -202,7 +202,7 @@ function setBackground() {
     bestText.scale = (stage.canvas.width / 12) / bestText.getMeasuredWidth();
     bestText.textBaseline = "alphabetic";
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + best.getBounds().height * best.scale * randomN
+    bestText.y = best.y + best.getBounds().height * best.scale * randomN + bestText.getMeasuredHeight() * bestText.scale / 2
     // bestText.y = isMobile ? best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 1.7
     //     : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scale) / 3
 
@@ -210,7 +210,7 @@ function setBackground() {
     txtBesttemp.scale = bestText.scale
     txtBesttemp.textBaseline = "alphabetic";
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
-    txtBesttemp.y = best.y + best.getBounds().height * best.scale * randomN
+    txtBesttemp.y = best.y + best.getBounds().height * best.scale * randomN + txtBesttemp.getMeasuredHeight() * txtBesttemp.scale / 2
     // txtBesttemp.y = isMobile ? best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.7
     //     : best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 3
 
@@ -230,7 +230,7 @@ function setBackground() {
     scoreText.scale = bestText.scale
     scoreText.textBaseline = "alphabetic";
     scoreText.x = score.x + stage.canvas.width / 25
-    scoreText.y = score.y + best.getBounds().height * score.scale * randomN
+    scoreText.y = score.y + best.getBounds().height * score.scale * randomN + scoreText.getMeasuredHeight() * scoreText.scale / 2
     // scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
     // scoreText.y = isMobile ? score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 1.7
     //     : score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * scoreText.scale) / 3
@@ -240,7 +240,7 @@ function setBackground() {
     txtScore.scale = bestText.scale
     txtScore.textBaseline = "alphabetic";
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
-    txtScore.y = score.y + best.getBounds().height * score.scale * randomN
+    txtScore.y = score.y + best.getBounds().height * score.scale * randomN + txtScore.getMeasuredHeight() * txtScore.scale / 2
     // txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
     // txtScore.y = isMobile ? score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.7
     //     : score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 3
@@ -449,11 +449,11 @@ function onPressMove(evt) {
     }
 }
 function onMouseUp(evt) {
-    snd.play();
     pressMove = false;
     containerNew = []
     var target = blockUse[groupCurr].target;
     if (hintFree.length != 0) {
+        snd.play();
         lowerBlock = true;
         removeHand()
         game.scores += hintFree.length * 5
@@ -928,12 +928,12 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = txtScores.y;
+            txtScores.txt.y = txtScores.y + txtScores.txt.getMeasuredHeight() * txtScores.txt.scale / 2;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
                 game.best = scoresTemp
-                txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = txtBest.y;
+                txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.txt.scale;
+                txtBest.txt.y = txtBest.y + txtBest.txt.getMeasuredHeight() * txtBest.txt.scale / 2;
                 txtBest.txt.text = scoresTemp;
             }
         }

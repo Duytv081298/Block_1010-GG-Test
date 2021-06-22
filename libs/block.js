@@ -198,18 +198,20 @@ function setBackground() {
     best.x = stage.canvas.width / 14
     best.y = stage.canvas.height / 15
 
-
+    console.log(isMobile);
     var bestText = new createjs.Text('BEST', "30px Haettenschweiler", "#24e6f1");
-    bestText.scaleX = ((best.getBounds().height * best.scale * 0.7) / bestText.getMeasuredHeight());
+    bestText.scaleX = ((best.getBounds().height * best.scale * 0.6) / bestText.getMeasuredHeight());
     bestText.scaleY = bestText.scaleX / 1.3
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + (best.getBounds().height * best.scale) / 5
+    bestText.y = isMobile ? best.y + best.getBounds().height * best.scale
+        : best.y + (best.getBounds().height * best.scale - bestText.getMeasuredHeight() * bestText.scaleY) / 3
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX
     txtBesttemp.scaleY = bestText.scaleY
     txtBesttemp.x = best.x + best.getBounds().width * best.scale - stage.canvas.width / 10 - txtBesttemp.getMeasuredWidth() * txtBesttemp.scale
-    txtBesttemp.y = best.y + (best.getBounds().height * best.scale - txtBesttemp.getMeasuredHeight() * txtBesttemp.scale) / 1.5
+    txtBesttemp.y = best.y + best.getBounds().height * best.scale / 1.5
+    txtBesttemp.y = isMobile ? txtBesttemp.y : txtBesttemp.y - txtBesttemp.getMeasuredHeight() * txtBesttemp.scaleY / 1.5
 
 
 
@@ -230,7 +232,7 @@ function setBackground() {
     scoreText.scaleX = bestText.scaleX
     scoreText.scaleY = bestText.scaleY
     scoreText.x = score.x + stage.canvas.width / 25
-    scoreText.y = score.y + (score.getBounds().height * score.scale - scoreText.getMeasuredHeight() * bestText.scale) / 1.5
+    scoreText.y = isMobile ? score.y + score.getBounds().height * score.scale / 1.5 : score.y + score.getBounds().height * score.scale / 1.5 - scoreText.getMeasuredHeight() * scoreText.scaleY / 1.5
 
 
     var txtScore = new createjs.Text(scoresTemp, "30px Haettenschweiler", "#eaf7ff");
@@ -238,8 +240,7 @@ function setBackground() {
     txtScore.scaleX = bestText.scaleX
     txtScore.scaleY = bestText.scaleY
     txtScore.x = score.x + score.getBounds().width * score.scale - stage.canvas.width / 10 - txtScore.getMeasuredWidth() * txtScore.scale
-    txtScore.y = score.y + (score.getBounds().height * score.scale - txtScore.getMeasuredHeight() * txtScore.scale) / 1.5
-
+    txtScore.y = isMobile ? score.y + score.getBounds().height * score.scale / 1.5 : score.y + score.getBounds().height * score.scale / 1.5 - txtScore.getMeasuredHeight() * txtScore.scaleY / 1.5
     txtScores = {
         x: score.x + score.getBounds().width * score.scale - stage.canvas.width / 10,
         y: score.y + score.getBounds().height * score.scale / 1.5,
@@ -932,12 +933,13 @@ function updateScore() {
         scoresTemp += 1;
         if (scoresTemp <= game.scores) {
             txtScores.txt.x = txtScores.x - txtScores.txt.getMeasuredWidth() * txtScores.txt.scale;
-            txtScores.txt.y = txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scale / 1.5;
+            txtScores.txt.y = isMobile ? txtScores.y : txtScores.y - txtScores.txt.getMeasuredHeight() * txtScores.txt.scaleY / 1.5;
             txtScores.txt.text = scoresTemp;
             if (scoresTemp > game.best) {
+                F
                 game.best = scoresTemp
                 txtBest.txt.x = txtBest.x - txtBest.txt.getMeasuredWidth() * txtBest.scale;
-                txtBest.txt.y = txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scale / 1.5;
+                txtBest.txt.y = isMobile ? txtBest.y : txtBest.y - txtBest.txt.getMeasuredHeight() * txtBest.txt.scaleY / 1.5;
                 txtBest.txt.text = scoresTemp;
             }
         }

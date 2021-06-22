@@ -203,7 +203,7 @@ function setBackground() {
     bestText.scaleX = ((best.getBounds().height * best.scale * 0.7) / bestText.getMeasuredHeight());
     bestText.scaleY = bestText.scaleX / 1.3
     bestText.x = best.x + stage.canvas.width / 25
-    bestText.y = best.y + (best.getBounds().height * best.scale) / 1.5
+    bestText.y = best.y + (best.getBounds().height * best.scale) / 5
 
     var txtBesttemp = new createjs.Text(game.best, "30px Haettenschweiler", "#eaf7ff");
     txtBesttemp.scaleX = bestText.scaleX

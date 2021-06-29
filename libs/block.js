@@ -238,8 +238,8 @@ function renderSpin() {
     var tapSpin = new createjs.Text('Tap to spin', "30px Impact", "#ffffff");
     tapSpin.scale = w / 2 / tapSpin.getMeasuredWidth();
     tapSpin.x = (w - tapSpin.getMeasuredWidth() * tapSpin.scale) / 2
-    
-    tapSpin.y = h/10
+
+    tapSpin.y = h / 10
 
     var spin_border = new createjs.Sprite(spriteSheet, "spin_border");
     spin_border.scale = (w * 2.5 / 3) / spin_border.getBounds().width
@@ -285,7 +285,7 @@ function renderSpin() {
     intestines_spin.regY = spin_dog.getBounds().height * spin_dog.scale
     intestines_spin.x = w / 2
     intestines_spin.y = spin_border.getBounds().height * spin_border.scale / 50 + spin_dog.getBounds().height * spin_dog.scale
-    containerTemp.y = tapSpin.y + tapSpin.getMeasuredHeight()*tapSpin.scale*2
+    containerTemp.y = tapSpin.y + tapSpin.getMeasuredHeight() * tapSpin.scale * 2
 
     spin_button.addEventListener("click", () => { rotationSpin() }, false);
 
@@ -298,6 +298,7 @@ function startLevel() {
         game.map = setMap(map[level_rotation]);
         createGroupBlockFree();
         addHand()
+        setTimeEnd = setTimeout(setEndTime, 50000)
     }, 1000);
 }
 
@@ -990,8 +991,58 @@ function currentMouse(evt) {
     else if (isMobile) return { x: evt.changedTouches[0].clientX, y: evt.changedTouches[0].clientY }
     else return { x: evt.layerX, y: evt.layerY }
 }
-function callEndTime() {
 
+function setEndTime() {
+    createjs.Tween.removeTweens(install_now)
+    removeAllEvent()
+    removeHand()
+
+    var bg = new createjs.Sprite(spriteSheet, "bg");
+    bg.scaleX = stage.canvas.width / bg.getBounds().width;
+    bg.scaleY = stage.canvas.height / bg.getBounds().height;
+    bg.alpha = 0.95
+
+
+    var logo = new createjs.Sprite(spriteSheet, "logo");
+    logo.scale = (stage.canvas.width / 3.5) / logo.getBounds().width
+    logo.x = (stage.canvas.width - logo.getBounds().width * logo.scale) / 2
+    logo.y = stage.canvas.height / 9
+    logo.shadow = new createjs.Shadow('#000', 0, 0, 10);
+
+    var vlock = new createjs.Sprite(spriteSheet, "vlock");
+    vlock.scale = (stage.canvas.width * 2.3 / 3) / vlock.getBounds().width
+    vlock.x = (stage.canvas.width - vlock.getBounds().width * vlock.scale) / 2
+    vlock.y = logo.y + logo.getBounds().height * logo.scale * 1.3
+
+    var img1010 = new createjs.Sprite(spriteSheet, "img1010");
+    img1010.scale = vlock.scale
+    img1010.x = (stage.canvas.width - img1010.getBounds().width * img1010.scale) / 2
+    img1010.y = vlock.y + vlock.getBounds().height * vlock.scale * 1.2
+
+
+    var btn_continue = new createjs.Sprite(spriteSheet, "continue");
+    btn_continue.scale = (stage.canvas.width / 2.7) / btn_continue.getBounds().width
+    btn_continue.x = (stage.canvas.width - btn_continue.getBounds().width * btn_continue.scale) / 2
+    btn_continue.y = img1010.y + img1010.getBounds().height * img1010.scale * 1.8
+
+    stage.addChild(bg, btn_continue, logo, vlock, img1010);
+
+
+    var btn_continuex = btn_continue.x,
+        btn_continuey = btn_continue.y,
+        btn_continuescale = stage.canvas.width / 2.7 / btn_continue.getBounds().width;
+    createjs.Tween.get(btn_continue, { loop: true })
+        .to(
+            {
+                scale: (stage.canvas.width / 4) / btn_continue.getBounds().width,
+                x: (stage.canvas.width - ((stage.canvas.width / 4) / btn_continue.getBounds().width) * btn_continue.getBounds().width) / 2,
+                y: btn_continuey - (stage.canvas.width / 5 - stage.canvas.width / 8) / 10,
+            },
+            500,
+            createjs.Ease.linear
+        )
+        .to({ scale: btn_continuescale, x: btn_continuex, y: btn_continuey }, 500, createjs.Ease.linear);
+    btn_continue.addEventListener("click", () => { getLinkInstall() }, false);
 }
 
 function updateScore() {
@@ -1052,8 +1103,6 @@ function endRotation() {
         startLevel();
     }
 }
-
-
 function endRotation1() {
     switch (level_rotation) {
         case 0:

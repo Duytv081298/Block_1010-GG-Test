@@ -286,12 +286,15 @@ function renderSpin() {
     intestines_spin.x = w / 2
     intestines_spin.y = spin_border.getBounds().height * spin_border.scale / 50 + spin_dog.getBounds().height * spin_dog.scale
     containerTemp.y = tapSpin.y + tapSpin.getMeasuredHeight() * tapSpin.scale * 2
+    if (isMobile) canvas.addEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
+    else canvas.addEventListener("mousedown", rotationSpin);
 
-    spin_button.addEventListener("click", () => { rotationSpin() }, false);
 
 }
 function startLevel() {
     setTimeout(() => {
+        if (isMobile) canvas.removeEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
+        else canvas.removeEventListener("mousedown", rotationSpin);
         stage.removeChild(spin)
         setBackground();
         stage.addChild(containerMain);
@@ -568,7 +571,6 @@ function addEventFree(target, i) {
         canvas.addEventListener("mousemove", onPressMove);
         canvas.addEventListener("mouseup", onMouseUp);
         target.myParam = i;
-
     }
 
 }

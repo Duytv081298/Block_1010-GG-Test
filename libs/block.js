@@ -293,8 +293,6 @@ function renderSpin() {
 }
 function startLevel() {
     setTimeout(() => {
-        if (isMobile) canvas.removeEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
-        else canvas.removeEventListener("mousedown", rotationSpin);
         stage.removeChild(spin)
         setBackground();
         stage.addChild(containerMain);
@@ -1141,6 +1139,8 @@ function endRotation1() {
     }
 }
 function rotationSpin() {
+    if (isMobile) canvas.removeEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
+    else canvas.removeEventListener("mousedown", rotationSpin);
     level_rotation = Math.floor(Math.random() * 5);
     rotation_time = 60;
     var xxx = 0;

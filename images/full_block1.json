@@ -1,0 +1,77 @@
+{
+
+"images": [
+    "full_block1.png"
+],
+
+"framerate": 20,
+"frames": [
+    [1, 1, 874, 231, 0, 0, 0],
+    [877, 1, 140, 144, 0, 0, 0],
+    [877, 147, 134, 142, 0, 0, 0],
+    [1, 234, 864, 110, 0, 0, 0],
+    [867, 291, 143, 137, 0, 0, 0],
+    [1, 346, 670, 668, 0, 0, 0],
+    [673, 430, 300, 533, 0, 0, 0],
+    [673, 346, 80, 82, 0, 0, 0],
+    [975, 430, 28, 29, 0, 0, 0],
+    [755, 346, 45, 53, 0, -5, -1],
+    [802, 346, 46, 46, 0, 0, 0],
+    [673, 965, 300, 301, 0, 0, 0],
+    [1, 1268, 133, 140, 0, 0, 0],
+    [136, 1268, 133, 140, 0, 0, 0],
+    [1, 1016, 622, 111, 0, 0, 0],
+    [271, 1129, 300, 300, 0, 0, 0],
+    [625, 1016, 46, 46, 0, 0, 0],
+    [625, 1064, 46, 46, 0, 0, 0],
+    [625, 1112, 46, 46, 0, 0, 0],
+    [573, 1129, 46, 46, 0, 0, 0],
+    [621, 1160, 46, 46, 0, 0, 0],
+    [573, 1177, 46, 46, 0, 0, 0],
+    [621, 1208, 46, 46, 0, 0, 0],
+    [573, 1225, 46, 46, 0, 0, 0],
+    [573, 1273, 300, 99, 0, 0, 0],
+    [573, 1374, 200, 53, 0, 0, 0],
+    [775, 1374, 200, 53, 0, 0, 0],
+    [1, 1129, 205, 67, 0, 0, 0],
+    [1, 1198, 200, 53, 0, 0, 0]
+],
+
+"animations": {
+    "bot": { "frames": [0] },
+    "spin/heart": { "frames": [1] },
+    "spin/bird": { "frames": [2] },
+    "score": { "frames": [3] },
+    "spin/house": { "frames": [4] },
+    "grid": { "frames": [5] },
+    "bg": { "frames": [6] },
+    "spin/button": { "frames": [7] },
+    "spin/center": { "frames": [8] },
+    "hand_tut": { "frames": [9] },
+    "block/blue": { "frames": [10] },
+    "spin/border": { "frames": [11] },
+    "spin/dog": { "frames": [12] },
+    "spin/high_heels": { "frames": [13] },
+    "best": { "frames": [14] },
+    "logo": { "frames": [15] },
+    "block/cyan": { "frames": [16] },
+    "block/green": { "frames": [17] },
+    "block/orange": { "frames": [18] },
+    "block/pink": { "frames": [19] },
+    "block/purple": { "frames": [20] },
+    "block/red": { "frames": [21] },
+    "block/yellow": { "frames": [22] },
+    "square_hint": { "frames": [23] },
+    "vlock": { "frames": [24] },
+    "continue": { "frames": [25] },
+    "install_now": { "frames": [26] },
+    "img1010": { "frames": [27] },
+    "play_again": { "frames": [28] }
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:ade13dc4fc71983ca498d2148c6a2a9c:9d0bedf1e8d9bd0e6d0c7fed8df5aec9:9bae56463baefec6abf870bc38043ad2$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

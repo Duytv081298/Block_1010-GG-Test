@@ -488,8 +488,31 @@ function addHand() {
     hand_tut.y = blockUse[1].y + (blockUse[1].height * storageBlock.height / 6) / 2;
     hand_tut.scale = (stage.canvas.width / 8) / hand_tut.getBounds().width;
     stage.addChild(hand_tut);
+    var xNew, yNew;
+    switch (level_rotation) {
+        case 0:
+            xNew = game.map[3][9].x;
+            yNew = game.map[3][9].y;
+            break;
+        case 1:
+            xNew = game.map[9][6].x;
+            yNew = game.map[9][6].y;
+            break;
+        case 2:
+            xNew = game.map[10][10].x;
+            yNew = game.map[10][10].y;
+            break;
+        case 3:
+            xNew = game.map[9][9].x;
+            yNew = game.map[9][9].y;
+            break;
+        case 4:
+            xNew = game.map[2][7].x;
+            yNew = game.map[2][7].y;
+            break;
+    }
     createjs.Tween.get(hand_tut, { loop: true })
-        .to({ x: game.map[5][10].x, y: game.map[5][10].y }, 1500)
+        .to({ x: xNew, y: yNew }, 1500)
         .wait(300)
         .to({ x: blockUse[1].x - hand_tut.getBounds().width * hand_tut.scale * 0.5, y: blockUse[1].y + (blockUse[1].height * storageBlock.height / 6) / 2 }, 1500)
         .wait(300)
@@ -1070,40 +1093,7 @@ function tick(event) {
         if (rotation_time > 0 && rotation_time <= 20) endRotation();
     }
 }
-
 function endRotation() {
-    if (Math.abs(intestines_spin.rotation % 360 - 360) >= 0 && Math.abs(intestines_spin.rotation % 360 - 360) <= 72 && level_rotation == 0) {
-        clearInterval(spin_rotation);
-        intestines_spin.rotation = -37;
-        rotation_time = 0;
-        startLevel();
-    }
-    else if (Math.abs(intestines_spin.rotation % 360 - 360) > 72 && Math.abs(intestines_spin.rotation % 360 - 360) <= 144 && level_rotation == 1) {
-        clearInterval(spin_rotation);
-        intestines_spin.rotation = -108;
-        rotation_time = 0;
-        startLevel();
-    }
-    else if (Math.abs(intestines_spin.rotation % 360 - 360) > 144 && Math.abs(intestines_spin.rotation % 360 - 360) <= 216 && level_rotation == 2) {
-        clearInterval(spin_rotation);
-        intestines_spin.rotation = 180;
-        rotation_time = 0;
-        startLevel();
-    }
-    else if (Math.abs(intestines_spin.rotation % 360 - 360) > 216 && Math.abs(intestines_spin.rotation % 360 - 360) <= 288 && level_rotation == 3) {
-        clearInterval(spin_rotation);
-        intestines_spin.rotation = 108;
-        rotation_time = 0;
-        startLevel();
-    }
-    else if (Math.abs(intestines_spin.rotation % 360 - 360) > 288 && Math.abs(intestines_spin.rotation % 360 - 360) <= 360 && level_rotation == 4) {
-        clearInterval(spin_rotation);
-        intestines_spin.rotation = 37;
-        rotation_time = 0;
-        startLevel();
-    }
-}
-function endRotation1() {
     switch (level_rotation) {
         case 0:
             clearInterval(spin_rotation);

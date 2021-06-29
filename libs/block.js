@@ -297,7 +297,7 @@ function startLevel() {
         game.map = setMap(map[level_rotation]);
         createGroupBlockFree();
         addHand()
-        setTimeEnd = setTimeout(setEndTime, 50000)
+        setTimeEnd = setTimeout(setEndTime, 60000)
     }, 1000);
 }
 

@@ -32,7 +32,6 @@ var rotation_time = 0, level_rotation = 0, spin_rotation;
 var intestines_spin = new createjs.Container();
 var spin = new createjs.Container();
 
-var level = 0;
 const blockFree = [
     [[0, 1], [1, 1], [0, 1]],
     [[1, 1], [1, 1]],
@@ -735,7 +734,6 @@ function createGroupBlockFree() {
         if (target != null) render = false
     }
     if (render) {
-        level++
         blockUse = []
         var listBlock = randomIndex()
         for (let i = 0; i < listBlock.length; i++) {
@@ -750,12 +748,7 @@ function randomIndex() {
     var pass = true;
     var listIndex = [];
     var index;
-    var num = level >= 6 ? 2 : 3
-    if (level >= 6) {
-        index = Math.floor(Math.random() * blockFreeHard.length)
-        listIndex.push(blockFreeHard[index])
-    }
-    for (let i = 0; i < num; i++) {
+    for (let i = 0; i < 3; i++) {
         index = Math.floor(Math.random() * blockFree.length)
         if (listIndex.indexOf(index) != -1) {
             if (pass) {

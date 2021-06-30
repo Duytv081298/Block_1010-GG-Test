@@ -27,6 +27,7 @@ var indexHint = {}, hintCurr = 0, groupHint = new createjs.Container(), distance
 var hand_tut, scoresTemp = 0, install_now, removeArray = [];
 var txtBest, txtScores;
 var tempX, tempY;
+var spin_choose = []
 
 var rotation_time = 0, level_rotation = 0, spin_rotation;
 var intestines_spin = new createjs.Container();
@@ -51,13 +52,10 @@ const blockFree = [
     [[1, 1], [0, 1, 1]]
 ];
 
-const blockFreeHard = [
-    [[1, 1], [1], [1]],
-    [[1], [1], [1], [1], [1]],
-    [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
-    [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-    [[1, 1], [0, 1], [0, 1]],
-    [[1, 1, 1, 1, 1]],
+const blockHouse = [
+    [[1], [1], [1], [1]],
+    [[1, 1, 1]],
+    [[1, 1], [0, 1]],
 ];
 const map = [
     [
@@ -284,21 +282,26 @@ function renderSpin() {
     intestines_spin.x = w / 2
     intestines_spin.y = spin_border.getBounds().height * spin_border.scale / 50 + spin_dog.getBounds().height * spin_dog.scale
     containerTemp.y = tapSpin.y + tapSpin.getMeasuredHeight() * tapSpin.scale * 2
-    if (isMobile) canvas.addEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
-    else canvas.addEventListener("mousedown", rotationSpin);
+    if (isMobile) containerTemp.addEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
+    else containerTemp.addEventListener("mousedown", rotationSpin);
+    spin_choose = [spin_high_heels, spin_house, spin_heart, spin_bird, spin_dog]
 
 
 }
 function startLevel() {
-    setTimeout(() => {
-        stage.removeChild(spin)
-        setBackground();
-        stage.addChild(containerMain);
-        game.map = setMap(map[level_rotation]);
-        createGroupBlockFree();
-        addHand()
-        setTimeEnd = setTimeout(setEndTime, 60000)
-    }, 1000);
+    stage.removeChild(spin)
+    setBackground();
+    stage.addChild(containerMain);
+    game.map = setMap(map[level_rotation]);
+    if (level_rotation == 1) {
+        for (let i = 0; i < blockHouse.length; i++) {
+            const block = blockHouse[i];
+            var color = Math.floor(Math.random() * 6)
+            renderGroupBlock(block, color, i);
+        }
+    } else createGroupBlockFree();
+    addHand()
+    setTimeEnd = setTimeout(setEndTime, 60000)
 }
 
 function setMap(map) {
@@ -1082,57 +1085,91 @@ function tick(event) {
     if (update) {
         stage.update(event);
         intestines_spin.rotation += rotation_time;
-        if (rotation_time > 0 && rotation_time <= 20) endRotation();
+        if (rotation_time > 0 && rotation_time <= 1) endRotation();
     }
 }
 function endRotation() {
-    switch (level_rotation) {
-        case 0:
-            clearInterval(spin_rotation);
-            intestines_spin.rotation = -37;
-            rotation_time = 0;
-            startLevel();
-            break;
-        case 1:
-            clearInterval(spin_rotation);
-            intestines_spin.rotation = -108;
-            rotation_time = 0;
-            startLevel();
-            break;
-        case 2:
-            clearInterval(spin_rotation);
-            intestines_spin.rotation = 180;
-            rotation_time = 0;
-            startLevel();
-            break;
-        case 3:
-            clearInterval(spin_rotation);
-            intestines_spin.rotation = 108;
-            rotation_time = 0;
-            startLevel();
-            break;
-        case 4:
-            clearInterval(spin_rotation);
-            intestines_spin.rotation = 37;
-            rotation_time = 0;
-            startLevel();
-            break;
-
+    var coordinates = intestines_spin.rotation % 360 - 360
+    var coordinatesMath = Math.abs(coordinates)
+    if (coordinatesMath >= 0 && coordinatesMath <= 72) {
+        clearInterval(spin_rotation);
+        level_rotation = 0
+        rotation_time = 0;
+        intestines_spin.rotation = coordinates
+        balanceAngle(coordinates, -37)
+    }
+    else if (coordinatesMath > 72 && coordinatesMath <= 144) {
+        clearInterval(spin_rotation);
+        level_rotation = 1
+        rotation_time = 0;
+        intestines_spin.rotation = coordinates
+        balanceAngle(coordinates, -108)
+    }
+    else if (coordinatesMath > 144 && coordinatesMath <= 216) {
+        level_rotation = 2
+        clearInterval(spin_rotation);
+        rotation_time = 0;
+        intestines_spin.rotation = coordinates
+        balanceAngle(coordinates, -180)
+    }
+    else if (coordinatesMath > 216 && coordinatesMath <= 288) {
+        level_rotation = 3
+        clearInterval(spin_rotation);
+        rotation_time = 0;
+        intestines_spin.rotation = coordinates
+        balanceAngle(coordinates, -255)
+    }
+    else if (coordinatesMath > 288 && coordinatesMath <= 360) {
+        console.log('chó');
+        level_rotation = 4
+        clearInterval(spin_rotation);
+        rotation_time = 0;
+        intestines_spin.rotation = coordinates
+        balanceAngle(coordinates, -327)
     }
 }
+
+function balanceAngle(angle, stan) {
+    setTimeout(() => {
+        if (angle <= stan) {
+            var myVar = setInterval(() => {
+                intestines_spin.rotation++
+                if (intestines_spin.rotation >= stan) {
+                    clearInterval(myVar);
+                    spinChoose()
+                }
+            }, 30);
+        } else {
+            var myVar = setInterval(() => {
+                intestines_spin.rotation--
+                if (intestines_spin.rotation <= stan) {
+                    clearInterval(myVar);
+                    spinChoose()
+                }
+            }, 30);
+        }
+    }, 200);
+
+}
+function spinChoose() {
+    createjs.Tween.get(spin_choose[level_rotation], { loop: 3 })
+        .to({ alpha: 0.5 }, 200, createjs.Ease.linear)
+        .to({ alpha: 1 }, 300, createjs.Ease.linear)
+    setTimeout(() => { startLevel() }, 1500);
+
+}
 function rotationSpin() {
-    if (isMobile) canvas.removeEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
-    else canvas.removeEventListener("mousedown", rotationSpin);
-    level_rotation = Math.floor(Math.random() * 5);
-    rotation_time = 60;
+    if (isMobile) spin.children[1].removeEventListener("mousedown", rotationSpin, supportsPassive ? { passive: true } : false);
+    else spin.children[1].removeEventListener("mousedown", rotationSpin);
+    rotation_time = Math.floor(Math.random() * 6) * 5 + 25;
     var xxx = 0;
     spin_rotation = setInterval(function () {
-        if (rotation_time <= 20) {
+        if (rotation_time <= 40) {
             rotation_time--;
             if (rotation_time <= 0) clearInterval(spin_rotation);
         } else {
             rotation_time -= (2 + xxx);
-            xxx++;
+            xxx += 0.1;
         }
     }, 100);
 }

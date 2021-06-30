@@ -293,7 +293,7 @@ function startLevel() {
     setBackground();
     stage.addChild(containerMain);
     game.map = setMap(map[level_rotation]);
-    if (level_rotation == 1) {
+    if (level_rotation == 2) {
         for (let i = 0; i < blockHouse.length; i++) {
             const block = blockHouse[i];
             var color = Math.floor(Math.random() * 6)
